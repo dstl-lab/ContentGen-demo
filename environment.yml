@@ -15,6 +15,6 @@ dependencies:
   - pip
   - pip:
       - coverage==5.5
-      - babypandas==0.1.7
+      - babypandas==0.1.9
       - google-generativeai
       - server-extension
