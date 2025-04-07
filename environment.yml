@@ -10,7 +10,10 @@ dependencies:
   - python-dotenv
   - fastapi
   - uvicorn
+  - pandas
   - pip
   - pip:
+      - coverage==5.5
+      - babypandas==0.1.7
       - google-generativeai
       - server-extension
