@@ -11,6 +11,7 @@ dependencies:
   - fastapi
   - uvicorn
   - pandas
+  - matplotlib
   - pip
   - pip:
       - coverage==5.5
