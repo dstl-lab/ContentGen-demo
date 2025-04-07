@@ -1,2 +1,8 @@
 jupyterlab
+google-generativeai
+requests
+beautifulsoup4
+python-dotenv
+fastapi
+uvicorn
 server-extension
