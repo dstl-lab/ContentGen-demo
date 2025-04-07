@@ -1,0 +1,16 @@
+name: contentgen-demo
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - jupyterlab
+  - requests
+  - beautifulsoup4
+  - python-dotenv
+  - fastapi
+  - uvicorn
+  - pip
+  - pip:
+      - google-generativeai
+      - server-extension
