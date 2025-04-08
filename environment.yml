@@ -4,14 +4,15 @@ channels:
   - defaults
 dependencies:
   - python=3.10
+  - numpy=1.21.1
+  - pandas
+  - matplotlib
   - jupyterlab
   - requests
   - beautifulsoup4
   - python-dotenv
   - fastapi
   - uvicorn
-  - pandas
-  - matplotlib
   - pip
   - pip:
       - coverage==5.5
