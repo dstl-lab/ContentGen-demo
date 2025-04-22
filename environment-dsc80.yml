@@ -17,7 +17,7 @@ dependencies:
   - nbclassic=1.1.0
   - nbconvert=7.16.4
   - notebook=7.2.2
-  - numpy=2.1.1
+  - numpy=2.0.1
   - pandas=2.2.3
   - plotly=5.24.1
   - pydantic=2.9.2
