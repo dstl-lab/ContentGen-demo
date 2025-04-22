@@ -6,7 +6,7 @@ By the way, our extension package is called `server-extension` for now.
 
 1. Clone the ContentGen-demo repo: `git clone https://github.com/dstl-lab/ContentGen-demo.git`
 2. `cd ContentGen-demo`
-3. `conda env create -f environment.yml`
+3. `conda env create -f environment.yml` OR ``conda env create -f environment-dsc80.yml``
 4. `conda activate contentgen-demo`
 5. `pip show server-extension`
 6. Identify from the displayed message `Location: <your_own_path>/site-packages/server_extension/`
