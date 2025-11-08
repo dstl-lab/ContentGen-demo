@@ -4,3 +4,4 @@ contentgen
 jupyterlab
 matplotlib
 tqdm
+ipywidgets
