@@ -1,10 +1,11 @@
 # ContentGen
 
 ## Overview
-This JupyterLab extension was developed as part of the Data Science Teaching & Learning Lab at UC San Diego. It is designed to support data science instruction by generating context-aware practice questions directly within a notebook. The extension features a pip-installable Python backend and a TypeScript frontend, which communicate via custom HTTP handlers. Built with student learning in mind, it enhances engagement by embedding dynamic, AI-generated content into the notebook workflow.
+ContentGen is a JupyterLab extension available on [PyPI](https://pypi.org/project/contentgen/) that generates context-aware practice questions and summaries directly within notebooks. Developed at the Data Science Teaching & Learning Lab at UC San Diego, it supports instructors by embedding dynamic, AI-generated content into the notebook workflow.
 
-This project is currently maintained in a private repository. Contributors include Ylesia Wu, Ayush Shah, Gabriel Cha and Jiaen Yu, under the guidance of Professor Sam Lau.
+The extension includes a pip-installable Python backend and a TypeScript frontend connected through custom HTTP handlers.
 
+Contributors: Ylesia Wu, Ayush Shah, Gabriel Cha, and Jiaen Yu, under the guidance of Professor Sam Lau.
 
 
 ## Quick Start
