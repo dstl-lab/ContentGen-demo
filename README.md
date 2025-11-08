@@ -82,3 +82,11 @@ Email: jiy037@ucsd.edu
 **Ylesia Wu**  
 GitHub: [@ylesia-wu](https://github.com/ylesia-wu)  
 Email: xw001@ucsd.edu
+
+**Ayush Shah**  
+GitHub: [@Ayush1124](https://github.com/Ayush1124)  
+Email: ajshah@ucsd.edu
+
+**Gabriel Cha**  
+GitHub: [@gabrielchasukjin](https://github.com/gabrielchasukjin)  
+Email: gcha@ucsd.edu
