@@ -32,8 +32,8 @@ Open the **ContentGen** sidebar and enter your API key to start generating conte
 ## Resources
 
 - [**ContentGen** on PyPI](https://pypi.org/project/contentgen/): official Python package for installing the ContentGen extension.  
-- [**Public GitHub Repository**](link): open-source version of the extension’s codebase.
-- [**Prompt Templates**](link): backend prompts used for content generation.  
+- [**Public GitHub Repository**](https://github.com/dstl-lab/ContentGen-public): open-source version of the extension’s codebase.
+- [**Prompt Templates**](https://github.com/dstl-lab/ContentGen-public/blob/main/contentgen/handlers.py): backend prompts used for content generation.  
 - [**Example Notebooks**](example_notebooks): demonstration notebooks showing typical usage; dependencies listed in [requirements.txt](requirements.txt).  
 - [**Evaluation Dataset**](link): anonymized dataset used in our study for evaluating generated content quality.
 
