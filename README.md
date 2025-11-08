@@ -5,8 +5,6 @@
 
 This project accompanies the paper *“Improving LLM-Generated Educational Content: A Case Study on Prototyping, Prompt Engineering, and Evaluating a Tool for Generating Programming Problems for Data Science.”*
 
-Contributors: Ylesia Wu, Ayush Shah, Gabriel Cha, and Jiaen Yu, under the guidance of Professor Sam Lau.
-
 
 ## Quick Start
 
@@ -25,7 +23,7 @@ jupyter lab
 
 Open the **ContentGen** sidebar and enter your API key to start generating content.
 
-### Get a Gemini Api Key
+### Get a Gemini API Key
 1. Go to [Google AI Studio](https://aistudio.google.com/apikey) and create an API key.
 2. Copy and store your key securely.
 3. Launch JupyterLab, open the **ContentGen** sidebar, and paste the key when prompted.
@@ -40,3 +38,23 @@ Open the **ContentGen** sidebar and enter your API key to start generating conte
 - [**Evaluation Dataset**](link): anonymized dataset used in our study for evaluating generated content quality.
 
 ## Acknowledgments
+
+This project was developed as part of the Data Science Teaching & Learning Lab at UC San Diego, led by Professor Sam Lau.  
+
+Contributors: Ylesia Wu, Ayush Shah, Gabriel Cha, and Jiaen Yu.  
+
+We thank the lab members for their feedback during development of the tool.
+
+## Contact Information
+
+**Sam Lau**  
+GitHub: [@SamLau95](https://github.com/SamLau95)  
+Email: sel011@ucsd.edu
+
+**Jiaen Yu**  
+GitHub: [@yujiaen1999](https://github.com/yujiaen1999)  
+Email: jiy037@ucsd.edu
+
+**Ylesia Wu**  
+GitHub: [@ylesia-wu](https://github.com/ylesia-wu)  
+Email: xw001@ucsd.edu
