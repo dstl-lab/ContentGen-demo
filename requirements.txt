@@ -2,3 +2,4 @@ pandas
 numpy
 contentgen
 jupyterlab
+matplotlib
