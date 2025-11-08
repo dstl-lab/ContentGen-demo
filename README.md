@@ -32,10 +32,33 @@ Open the **ContentGen** sidebar and enter your API key to start generating conte
 ## Resources
 
 - [**ContentGen** on PyPI](https://pypi.org/project/contentgen/): official Python package for installing the ContentGen extension.  
-- [**Public GitHub Repository**](link): clean public version of the extension’s source code.
+- [**Public GitHub Repository**](link): open-source version of the extension’s codebase.
 - [**Prompt Templates**](link): backend prompts used for content generation.  
-- [**Example Notebook**](example_notebooks): demonstration notebook showing typical usage; dependencies listed in [requirements.txt](requirements.txt).  
+- [**Example Notebooks**](example_notebooks): demonstration notebooks showing typical usage; dependencies listed in [requirements.txt](requirements.txt).  
 - [**Evaluation Dataset**](link): anonymized dataset used in our study for evaluating generated content quality.
+
+
+### Running the Example Notebook
+
+To run the example notebooks locally:
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/dstl-lab/ContentGen-demo.git
+   cd ContentGen-demo
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Launch JupyterLab:
+   ```bash
+   jupyter lab
+   ```
+4. Open the notebooks in `example_notebooks`.
+
+You can then explore the notebooks interactively and utilize the **ContentGen** extension within JupyterLab to generate AI-assisted teaching content.
+
 
 ## Acknowledgments
 
@@ -44,6 +67,7 @@ This project was developed as part of the Data Science Teaching & Learning Lab a
 Contributors: Ylesia Wu, Ayush Shah, Gabriel Cha, and Jiaen Yu.  
 
 We thank the lab members for their feedback during development of the tool.
+
 
 ## Contact Information
 
