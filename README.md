@@ -14,8 +14,7 @@ This project accompanies the paper *“Improving LLM-Generated Educational Conte
 > Engineering, and Evaluating a Tool for Generating Programming Problems
 > for Data Science. In Proceedings of the 57th ACM Technical Symposium on
 > Computer Science Education V.1 (SIGCSE TS 2026), February 18–21, 2026, St.
-> Louis, MO, USA. ACM, New York, NY, USA, 7 pages. https://doi.org/10.1145/
-> 3770762.3772619
+> Louis, MO, USA. ACM, New York, NY, USA, 7 pages. https://doi.org/10.1145/3770762.3772619
 
 ```bibtex
 @coming_soon
