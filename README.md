@@ -9,8 +9,13 @@ This project accompanies the paper *“Improving LLM-Generated Educational Conte
 
 **Please cite this paper if you used the code, dataset, or prompts in this repository.**
 
-> **Coming soon:** This paper is currently under submission.  
-> A preprint or DOI link will be provided once the paper is published.
+> Jiaen Yu, Ylesia Wu, Gabriel Cha, Ayush Shah, and Sam Lau. 2026. Improving
+> LLM-Generated Educational Content: A Case Study on Prototyping, Prompt
+> Engineering, and Evaluating a Tool for Generating Programming Problems
+> for Data Science. In Proceedings of the 57th ACM Technical Symposium on
+> Computer Science Education V.1 (SIGCSE TS 2026), February 18–21, 2026, St.
+> Louis, MO, USA. ACM, New York, NY, USA, 7 pages. https://doi.org/10.1145/
+> 3770762.3772619
 
 ```bibtex
 @coming_soon
