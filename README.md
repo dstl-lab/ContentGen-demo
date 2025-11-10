@@ -86,8 +86,6 @@ GitHub: [@SamLau95](https://github.com/SamLau95)
 Email: sel011@ucsd.edu
 
 **Jiaen Yu**
-
-Website: [jiaenyu.com](https://www.jiaenyu.com/)
 GitHub: [@yujiaen1999](https://github.com/yujiaen1999)  
 Email: jiy037@ucsd.edu
 
