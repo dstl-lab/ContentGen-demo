@@ -35,7 +35,7 @@ Open the **ContentGen** sidebar and enter your API key to start generating conte
 - [**Public GitHub Repository**](https://github.com/dstl-lab/ContentGen-public): open-source version of the extension’s codebase.
 - [**Prompt Templates**](https://github.com/dstl-lab/ContentGen-public/blob/main/contentgen/handlers.py): backend prompts used for content generation.  
 - [**Example Notebooks**](example_notebooks): demonstration notebooks showing typical usage; dependencies listed in [requirements.txt](requirements.txt).  
-- [**Evaluation Dataset**](link): anonymized dataset used in our study for evaluating generated content quality.
+- [**Evaluation Dataset**](evaluation_dataset): anonymized dataset used in our study for evaluating generated content quality.
 
 
 ### Running the Example Notebook

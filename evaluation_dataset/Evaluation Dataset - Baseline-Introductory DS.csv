@@ -1,0 +1,1291 @@
+Lecture #,Cell Index,Cell Content,User Input,LLM Output,Correctness,Context,Coherence
+lec02,40,7_days = 24 * 7,give me a question that demonstrates similar concept,"Location: 41
+
+Summary: Question:
+
+What is the value of `sd` after the following code is executed?
+```python
+uc = 2
+sd = 3 + uc
+uc = 7
+```
+Answer:
+```python
+uc = 2
+sd = 3 + uc
+uc = 7
+print(sd) # Output: 5
+```",1,1,0
+lec02,124,"fave_string.replace('favorite', '😍' * 3)",give me another example,"Location: 125
+
+Summary: Question:
+
+Write a line of code that uses a string method to remove leading and trailing whitespace from the string `' Hello, world! '`.
+
+Answer:
+```python
+' Hello, world! '.strip()
+```
+",1,0,1
+lec03,51,"mixed_list = [-2, 2.5, 'ucsd', [1, 3]]
+mixed_list",give me a question showing the similar idea,"Location: 52
+
+Summary: Question:
+
+Convert the `temperature_list` into a NumPy array named `temperature_array`. Then, calculate the average temperature in Celsius using array operations. Note that the original temperature values in `temperature_list` are in Fahrenheit. The conversion from Fahrenheit to Celsius is given by the formula: Celsius = (5/9) * (Fahrenheit - 32).
+
+Answer:
+```python
+import numpy as np
+
+temperature_list = [68, 73, 70, 74, 76, 72, 74]
+temperature_array = np.array(temperature_list)
+celsius_array = (5/9) * (temperature_array - 32)
+average_celsius = np.mean(celsius_array)
+print(average_celsius)
+```
+",1,0,0
+lec03,76,"# Convert all temperatures to Celsius.
+(5 / 9) * (temperature_array - 32)",give me a relevant next step example,"Location: 77
+
+Summary: Question:
+
+Convert the temperatures in `temperature_array` from Celsius back to Fahrenheit using NumPy array operations.
+
+Answer:
+```python
+temperature_array_fahrenheit = (temperature_array * 9/5) + 32
+temperature_array_fahrenheit
+```
+",1,1,1
+lec04,33,states.get('Population') / states.get('Land Area'),give me another question about Series operation,"Location: 36
+
+Summary: Question:
+
+Use the `states` DataFrame, which contains a 'Population' and 'Land Area' column, to calculate the population density for each state. Then, calculate and print the average population density across all states.
+
+Answer:
+```python
+states = states.assign(
+Density=states.get('Population') / states.get('Land Area')
+)
+average_density = states.get('Density').mean()
+print(f""The average population density is: {average_density}"")
+```",1,0,0
+lec04,80,states.get('Density').loc['Pennsylvania'],give me a relevant question,"Location: 81
+
+Summary: Question:
+
+What is the population density of California?
+
+Answer:
+```python
+states.get('Density').loc['California']
+```",1,1,0
+lec05,31,"# What proportion of US states are Republican?
+only_rep.shape[0] / states.shape[0]",give me a different example,"Location: 32
+
+Summary: Question:
+
+What is the name of the Midwest state with the largest land area?
+
+Answer:
+```python
+(states[states['Region'] == 'Midwest']
+.sort_values(by='Land Area', ascending=False)
+.index[0])
+```
+",1,0,0
+lec05,101,"imdb = bpd.read_csv('data/imdb.csv').set_index('Title').sort_values(by='Rating')
+imdb",give me a good challenging question,"Location: 102
+
+Summary: Question:
+
+What is the average weight of each pet species in the `pets` DataFrame, and how would you compute this using the `.groupby()` method?
+
+Answer:
+```python
+import pandas as pd
+pets = pd.DataFrame().assign(
+Species=['dog', 'cat', 'cat', 'dog', 'dog', 'hamster'],
+Color=['black', 'golden', 'black', 'white', 'golden', 'golden'],
+Weight=[40, 15, 20, 80, 25, 1],
+Age=[5, 8, 9, 2, 0.5, 3]
+)
+
+average_weight_by_species = pets.groupby('Species')['Weight'].mean()
+print(average_weight_by_species)
+```
+",1,0,1
+lec06,16,"states_by_region = states.groupby('Region').count()
+states_by_region",give me another activity that's with similar difficulty,"Location: 17
+
+Summary: Question:
+
+What is the average population density of each region in the `states` DataFrame?
+
+Answer:
+```python
+states['Density'] = states['Population'] / states['Land Area']
+average_density_by_region = states.groupby('Region')['Density'].mean()
+print(average_density_by_region)
+```
+",1,1,1
+lec06,76,"# Give columns more meaningful names and eliminate redundancy.
+popular_detection = (popular_detection.assign(Count=popular_detection.get('Distance'))
+                                      .get(['Count'])
+                                      .sort_values(by='Count', ascending=False)
+                    )
+popular_detection","since this code is relatively hard and has many steps, I want another similar example for students","Location: 77
+
+Summary: Question:
+
+Create a horizontal bar chart visualizing the number of exoplanets discovered per detection method using the `exo` DataFrame. Ensure the bars are sorted in descending order of count.
+
+Answer:
+```python
+import pandas as pd
+
+exo = pd.read_csv('data/exoplanets.csv').set_index('Name')
+
+popular_detection = exo.groupby('Detection').count()
+popular_detection = popular_detection.assign(Count=popular_detection['Distance'])
+popular_detection = popular_detection[['Count']].sort_values(by='Count', ascending=False)
+popular_detection.plot(kind='barh', y='Count')
+```",0,0,1
+lec07,27,"# As a result, we could have set y='Magnitude', for example, and gotten the same plot.
+type_counts.plot(kind='barh', y='Distance', 
+                 legend=False, title='Distribution of Exoplanet Types');",give me another example,"Location: 28
+
+Summary: Question:
+
+Create a horizontal bar chart of the average magnitude and radius for each exoplanet type, ensuring that the bars are ordered by magnitude in descending order.
+
+Answer:
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming 'exo' DataFrame is available from previous code
+types = exo.groupby('Type').mean().get(['Magnitude', 'Radius'])
+
+types_sorted = types.sort_values(by='Magnitude', ascending=False)
+
+types_sorted.plot(kind='barh', y='Magnitude')
+plt.show()
+```
+",0,0,1
+,,,make it a bit more challenging,"Location: 28
+
+Summary: Question:
+
+Create a horizontal bar chart of the mean radius and magnitude of each exoplanet type, but order the bars in ascending order of the mean radius.
+
+Answer:
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+exo = pd.read_csv('data/exoplanets.csv').set_index('Name')
+types = exo.groupby('Type').mean().get(['Magnitude', 'Radius'])
+types_sorted = types.sort_values('Radius')
+types_sorted.plot(kind='barh', title='Mean Radius and Magnitude by Exoplanet Type (Ascending Radius Order)');
+plt.show()
+```",,,
+lec07,52,"terr.plot(kind='hist', y='Radius', density=True, bins=[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5], ec='w');",give me another example on how to customize the bins,"Location: 54
+
+Summary: Question:
+
+Create a histogram of the 'Radius' column in the `terr` DataFrame, using custom bins to emphasize the range between 0.75 and 1.5. Specifically, use bins that are narrowly spaced (0.1) around 0.75 and 1.0, then coarser spacing (0.5) outside that range.
+
+Answer:
+```python
+import numpy as np
+terr.plot(kind='hist', y='Radius', density=True, bins=np.concatenate((np.arange(0, 0.75, 0.1), np.arange(0.75, 1.5, 0.1), np.arange(1.5, 4, 0.5))), ec='w');
+```
+",0,0,1
+lec08,60,"def better_pythagorean(a, b):
+    '''Computes the hypotenuse length of a right triangle with legs a and b, 
+       and actually returns the result.
+    '''
+    c = (a ** 2 + b ** 2) ** 0.5
+    return c",give me a similar example for the concept of returning,"Location: 61
+
+Summary: Question:
+
+Write a function that takes a string as input and returns the string with the first letter capitalized.
+
+Answer:
+```python
+def capitalize_first_letter(input_string):
+""""""Capitalizes the first letter of a string.
+""""""
+if not input_string:
+return input_string # Handle empty string
+return input_string[0].upper() + input_string[1:]
+
+# Example usage
+string1 = ""hello""
+string2 = """"
+print(capitalize_first_letter(string1)) # Output: Hello
+print(capitalize_first_letter(string2)) # Output:
+```
+",1,1,0
+,,,what about the concept of print vs. return,"Location: 61
+
+Summary: Question:
+
+What is the difference between using `print()` and `return` in a function, and how does this difference affect the value of the function and its usability in subsequent calculations?
+
+Answer:
+```python
+#Illustrative example of a function using print() to output to the console and not returning a value:
+def my_function(x):
+print(x * 2)
+result = my_function(5)
+print(result) # Output: None
+
+#Illustrative example of a function using return to output a value that can be assigned to a variable:
+def my_function_return(x):
+return x * 2
+result = my_function_return(5)
+print(result) # Output: 10
+
+#In the context of the motivational function:
+def motivational_return(quote):
+return ""Here's a motivational quote:"" + quote
+
+print(motivational_return('Fall seven times and stand up eight.'))
+```",,,
+lec08,94,"# Not necessarily meaningful, but doable.
+name_counts.get('name').apply(np.log)",give a meaningful question,"Location: 96
+
+Summary: Question:
+
+Create a bar chart visualizing the frequency of first names in the `roster` DataFrame, using the `name_counts` DataFrame for data. The chart should be labeled appropriately.
+
+Answer:
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create the bar chart
+plt.figure(figsize=(10, 6)) # Adjust figure size as needed
+sns.barplot(x=name_counts.index, y=name_counts['name'])
+
+# Add labels and title
+plt.xlabel('First Name')
+plt.ylabel('Count')
+plt.title('Frequency of First Names in Roster')
+plt.xticks(rotation=45, ha='right') # Rotate x-axis labels for readability
+
+# Show the plot
+plt.tight_layout() # Adjust layout to prevent labels from overlapping
+plt.show()
+```
+",1,0,0
+lec09,78,"#### What if we want to merge using an index instead of a column?
+
+Instead of using `left_on` or `right_on`, use `left_index=True` or `right_index=True`.","Generate a problem to practice this concept
+","Location: 79
+
+Summary: Question:
+
+Use the `clothes` and `offer_percentage` DataFrames. Merge them using indexes to create a DataFrame that shows each clothing item, its retail price, and its offer percentage. The final DataFrame should have three columns: 'item', 'retail_price', and 'offer_percentage'.
+
+Answer:
+```python
+offers_by_item = offer_percentage.set_index('clothing_type')
+merged_df = offers_by_item.merge(clothes, left_index=True, right_on='item')
+merged_df = merged_df[['item', 'retail_price', 'offer_percentage']]
+merged_df
+```
+",1,0,1
+lec09,19,"# One row per unique first name.
+roster.groupby('first').count().get(['name'])",generate a question based on this concept,"Location: 20
+
+Summary: Question:
+
+Use the `roster` DataFrame to generate a table that shows the number of students in each section, broken down by their first name. The table should have 'section' and 'first' as the index.
+
+Answer:
+```python
+roster.groupby(['section', 'first']).count().get(['name'])
+```
+",1,1,0
+lec10,8,"### The `in` operator
+
+Sometimes, we'll want to check if a particular element is in a list/array, or a particular **substring** is in a string. The `in` operator can do this for us, and it also results in a Boolean value.",Generate a question to test this concept,"Location: 9
+
+Summary: Question:
+
+Use the `in` operator to check if the variable `course` (defined in a previous code cell) is present within the list `[10, 20, 30, 40]`. Assign the boolean result to a variable named `present`.
+
+Answer:
+```python
+course = 10
+present = course in [10, 20, 30, 40]
+print(present)
+```
+",1,0,1
+lec10,23,"### Order of operations
+
+- By default, the order of operations is `not`, `and`, `or`. See the _precedence_ of all operators in Python [here](https://www.programiz.com/python-programming/precedence-associativity).
+- As usual, use **`(`parentheses`)`** to make expressions more clear.",Generate a question to help understand this concept,"Location: 24
+
+Summary: Question:
+
+Write a Python expression that uses the variables `dept` and `course` from the lecture notebook, along with logical operators `and` and `or`, to evaluate to `True` only if `course` is less than 20 and `dept` is equal to 'DSC'. Make sure to use parentheses to ensure correct precedence.
+
+Answer:
+```python
+(course < 20) and (dept == 'DSC')
+```
+",0,1,1
+lec12,5,"for x in [""my boyfriend"", ""a god"", ""the breeze in my hair on the weekend"", ""a relaxing thought""]:
+    print(""Karma is "" + x)",Create a similar example,"Location: 6
+
+Summary: Question:
+
+Write a function that counts the number of vowels (a, e, i, o, u) in a given string. For example, vowel_count('hello') should return 2, vowel_count('rhythm') should return 0, and vowel_count('i go to uc san diego') should return 10.
+
+Answer:
+```python
+def vowel_count(s):
+vowels = ""aeiou""
+count = 0
+for char in s.lower():
+if char in vowels:
+count += 1
+return count
+```
+",0,0,0
+lec12,31,"# Simulate a fair coin flip.
+np.random.choice(['Heads', 'Tails'])",Generate another example of a random choice,"Location: 32
+
+Summary: Question:
+
+Simulate drawing 5 cards from a standard deck of 52 cards without replacement. Print the result.
+
+Answer:
+```python
+import numpy as np
+
+deck = np.concatenate([np.repeat(suit, 13) for suit in ['C', 'D', 'H', 'S']])
+draw = np.random.choice(deck, 5, replace=False)
+print(draw)
+```
+",0,0,1
+lec13,68,"# Calculate the mean of the population.
+united_mean = united.get('Delay').mean()
+united_mean",Generate another example to explain mean,"Location: 69
+
+Summary: Question:
+
+Calculate the mean flight delay for a sample of 500 flights from the `united` DataFrame. How does this compare to the mean calculated from a sample of 1000 flights? What does this demonstrate about sample means?
+
+Answer:
+```python
+import pandas as pd
+import numpy as np
+
+sample_size_500 = united.sample(500).get('Delay').mean()
+sample_size_1000 = united.sample(1000).get('Delay').mean()
+
+print(f""Mean delay for 500 flights: {sample_size_500:.2f}"")
+print(f""Mean delay for 1000 flights: {sample_size_1000:.2f}"")
+
+# The difference between the two means will vary slightly every time this code is run
+# because sampling is random. The key thing to note is that both sample means are
+# generally quite close to the population mean, and the sample mean for 1000 flights
+# will tend to be closer to the population mean than the sample mean for 500 flights.
+# This demonstrates that larger sample sizes tend to produce sample means that are
+# better estimates of the population mean.
+```
+",1,0,0
+lec13,73,"### The effect of sample size
+
+What if we choose a larger sample size?",Generate a question to explain the difference between a small and large sample size,"Location: 69
+
+Summary: Question:
+
+Explain the difference observed in the distribution of flight delays when comparing a sample size of 100 to a sample size of 1000. Specifically, discuss the shape, center, and spread of the distributions. How does the larger sample size affect the accuracy of estimating the population mean?
+
+Answer:
+```python
+# The following code demonstrates the distributions for sample sizes of 100 and 1000.
+# The differences illustrate the impact of sample size on the sample mean.
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+united_full = pd.read_csv('data/united_summer2015.csv')
+united = united_full.get(['Delay'])
+bins = np.arange(-20, 300, 10)
+
+# Sample size 100
+plt.figure(figsize=(10,5))
+plt.subplot(1, 2, 1)
+(united.sample(100).plot(kind='hist', y='Delay', bins=bins, density=True, ec='w',
+title=f'Distribution of Flight Delays in a Sample of Size 100',
+figsize=(8, 3)))
+plt.ylabel('Proportion per minute')
+
+# Sample size 1000
+plt.subplot(1, 2, 2)
+(united.sample(1000).plot(kind='hist', y='Delay', bins=bins, density=True, ec='w',
+title=f'Distribution of Flight Delays in a Sample of Size 1000',
+figsize=(8, 3)))
+plt.ylabel('Proportion per minute')
+plt.tight_layout()
+plt.show()
+
+#Analysis
+#With a larger sample size (1000) the distribution more closely resembles a normal distribution.
+#The center of the distribution (the mean) would be expected to be closer to the true population mean with a larger sample size
+#The spread of the distribution (standard deviation) is reduced for the larger sample size.
+#A larger sample size is always preferable for estimating the population mean as it reduces bias and variance, improving the estimate's accuracy. The central limit theorem demonstrates that as sample size increases, the sampling distribution of the mean approaches a normal distribution. This means larger samples have more predictable behavior, increasing the reliability of inferences made about the population.
+```",0,0,1
+lec14,69,"### Calculating percentiles
+
+- The `numpy` package provides a function to calculate percentiles, `np.percentile(array, p)`, which returns the `p`th percentile of `array`. 
+- We won't worry about how this value is calculated - we'll just use the result!",Generate a question to explain percentiles,"Location: 70
+
+Summary: Question:
+
+What is the 90th percentile of the `TotalWages` in the `population` DataFrame?
+
+Answer:
+```python
+import numpy as np
+
+# Assuming that population is a DataFrame with a 'TotalWages' column
+np.percentile(population['TotalWages'], 90)
+```",0,0,1
+lec14,91,"### Visualizing our 95% confidence interval
+
+- Let's draw the interval we just computed on the histogram.
+- 95% of the bootstrap medians fell into this interval.",Create a question to test the students' understanding of confidence intervals,"Location: 92
+
+Summary: Question:
+
+Based on the bootstrap medians calculated from the `my_sample` DataFrame (containing the 'TotalWages' column), write a Python code snippet to compute and display the 95% confidence interval for the population median wage. The interval should be represented as a list [left, right], where 'left' and 'right' are the lower and upper bounds respectively. Also, print the width of the interval.
+
+Answer:
+```python
+import numpy as np
+
+# Assuming 'boot_medians' is the array of bootstrap medians calculated earlier.
+left = np.percentile(boot_medians, 2.5)
+right = np.percentile(boot_medians, 97.5)
+
+confidence_interval = [left, right]
+width = right - left
+
+print('Interval:', confidence_interval)
+print('Width:', width)
+```",1,0,0
+lec15,20,"- A 95% confidence level means that **approximately 95% of the time, the intervals you create through this process will contain the true population parameter**.",Generate a question to clarify this,"Location: 21
+
+Summary: Question:
+
+Given the provided code that generates a bootstrap confidence interval for the median of the `TotalWages` in the `2023_salaries.csv` dataset, explain the purpose of the line `n_resamples = 5000` and how increasing or decreasing this value would affect the resulting confidence interval.
+
+Answer:
+```python
+# The line 'n_resamples = 5000' sets the number of bootstrap resamples to be generated.
+# Each resample creates a new sample of 500 data points, selected with replacement, from the original sample.
+# The median of each resample is calculated, building up a distribution of medians.
+
+# Increasing n_resamples would lead to a more precise and stable estimate of the confidence interval.
+# This is because a larger number of resamples better approximates the underlying sampling distribution of the median.
+# However, it will also increase computation time.
+
+# Decreasing n_resamples would lead to a less precise and more variable confidence interval.
+# The estimation of the confidence interval would be less reliable with fewer resamples.
+# The computation time will decrease.
+```",1,1,0
+lec15,99,"### Standard deviation
+
+- Our data usually has units, e.g. dollars.
+- The variance is in ""squared"" units, e.g. $\text{dollars}^2$.
+- To account for this, we can take the square root of the variance, and the result is called the **standard deviation**.",Make a practice problem to explain standard deviation,"Location: 100
+
+Summary: Question:
+
+Calculate the standard deviation of the 'Delay' column in the `delays` DataFrame. Show your work, including the calculation of the mean, deviations from the mean, squared deviations, variance, and finally, the standard deviation.
+
+Answer:
+```python
+import numpy as np
+delays = bpd.read_csv('data/united_summer2015.csv')
+
+# Calculate the mean
+mean_delay = delays['Delay'].mean()
+
+# Calculate deviations from the mean
+deviations = delays['Delay'] - mean_delay
+
+# Calculate squared deviations
+squared_deviations = deviations ** 2
+
+# Calculate the variance
+variance = np.mean(squared_deviations)
+
+# Calculate the standard deviation
+std_dev = np.sqrt(variance)
+
+print(f""Mean delay: {mean_delay:.2f}"")
+print(f""Variance: {variance:.2f}"")
+print(f""Standard Deviation: {std_dev:.2f}"")
+```
+",0,0,1
+,99,"### Standard deviation
+
+- Our data usually has units, e.g. dollars.
+- The variance is in ""squared"" units, e.g. $\text{dollars}^2$.
+- To account for this, we can take the square root of the variance, and the result is called the **standard deviation**.",Make it a bit harder,"Location: 100
+
+Summary: Question:
+
+Using the `population` DataFrame containing total wages, calculate and print the standard deviation of the 'TotalWages' column. Remember that the standard deviation is the square root of the variance.
+
+Answer:
+```python
+import pandas as pd
+import numpy as np
+population = pd.read_csv('data/2023_salaries.csv').get(['TotalWages'])
+std_dev = np.std(population['TotalWages'])
+print(std_dev)
+```",,,
+lec16,17,"delay_std = np.std(delays.get('Delay')) # There is no .std() method in babypandas!
+delay_std",genenrate a similar question to undertstand std,"Location: 18
+
+Summary: Question:
+
+Calculate the standard deviation of the 'Height' column in the `height_and_weight` DataFrame. Show your code and the resulting standard deviation.
+
+Answer:
+```python
+import numpy as np
+height_std = np.std(height_and_weight.get('Height'))
+print(height_std)
+```
+",1,0,1
+,,,The used dataset is out of scope. Could you try to generate some other example to help understand std.,,,,
+lec16,21,- **At least** 88.88% of delays are in the following interval:,Could you negerata a similar question.,"Location: 22
+
+Summary: Question:
+
+What proportion of flight delays in the `delays` DataFrame fall within two standard deviations of the mean delay?
+
+Answer:
+```python
+import numpy as np
+
+delay_mean = delays['Delay'].mean()
+delay_std = np.std(delays['Delay'])
+
+within_2_sds = delays[(delays['Delay'] >= delay_mean - 2 * delay_std) & (delays['Delay'] <= delay_mean + 2 * delay_std)]
+
+proportion = within_2_sds.shape[0] / delays.shape[0]
+proportion
+```
+",0,0,1
+,,,,,,,
+lec17,84,"left_boot = np.percentile(resample_means, 2.5)
+right_boot = np.percentile(resample_means, 97.5)
+[left_boot, right_boot]",This part constructe a 95% confidence interval through bootstrapping. Generata a similar example to generate 90% confidence interval through bootstrapping,"Location: 85
+
+Summary: Question:
+
+Construct a 90% confidence interval for the mean flight delay using bootstrapping.
+
+Answer:
+```python
+np.random.seed(42)
+my_sample = delays.sample(500)
+resample_means = np.array([])
+repetitions = 2000
+
+for i in np.arange(repetitions):
+resample = my_sample.sample(500, replace=True)
+resample_mean = resample.get('Delay').mean()
+resample_means = np.append(resample_means, resample_mean)
+
+left_boot = np.percentile(resample_means, 5)
+right_boot = np.percentile(resample_means, 95)
+[left_boot, right_boot]
+```
+",1,0,1
+lec17,101,"left_normal = sample_mean_mean - 2 * sample_mean_sd
+right_normal = sample_mean_mean + 2 * sample_mean_sd
+[left_normal, right_normal]",generata a similar example,"Location: 101
+
+Summary: Question:
+
+Using the `my_sample` DataFrame and the `resample_means` array, calculate and display the 95% confidence interval for the mean flight delay using both the Central Limit Theorem (CLT) and the bootstrap method. Plot the results using histograms for comparison.
+
+Answer:
+```python
+import numpy as np
+import pandas as bpd
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Assuming my_sample and resample_means are defined from previous code cells
+
+# CLT-based confidence interval
+sample_mean_mean = my_sample['Delay'].mean()
+sample_mean_sd = np.std(my_sample['Delay']) / np.sqrt(my_sample.shape[0])
+left_normal = sample_mean_mean - 2 * sample_mean_sd
+right_normal = sample_mean_mean + 2 * sample_mean_sd
+
+# Bootstrap-based confidence interval
+left_boot = np.percentile(resample_means, 2.5)
+right_boot = np.percentile(resample_means, 97.5)
+
+# Plotting
+plt.figure(figsize=(12, 6))
+plt.hist(resample_means, bins=20, density=True, alpha=0.65, ec='w', label='Bootstrap Distribution')
+
+norm_x = np.linspace(7, 20)
+norm_y = stats.norm.pdf(norm_x, loc=sample_mean_mean, scale=sample_mean_sd)
+plt.plot(norm_x, norm_y, color='black', linestyle='--', linewidth=2, label='CLT Distribution')
+
+plt.axvline(left_normal, color='blue', linestyle='--', label=f'CLT Left: {left_normal:.2f}')
+plt.axvline(right_normal, color='blue', linestyle='--', label=f'CLT Right: {right_normal:.2f}')
+plt.axvline(left_boot, color='red', linestyle='--', label=f'Bootstrap Left: {left_boot:.2f}')
+plt.axvline(right_boot, color='red', linestyle='--', label=f'Bootstrap Right: {right_boot:.2f}')
+
+plt.xlabel('Mean Delay')
+plt.ylabel('Density')
+plt.title('Comparison of CLT and Bootstrap Confidence Intervals')
+plt.legend()
+plt.show()
+```",0,0,0
+lec18,51,"### Activity
+
+Suppose we instead want a 95% CI for the population mean that is at most 0.03 wide. What is the smallest sample size we could collect?
+
+<br>
+
+<details><summary>✅ Click <b>here</b> to see the answer <b>after</b> you've attempted the question yourself.</summary>
+
+$$\text{sample size} \geq \left( 4 \cdot \frac{\text{0.5}}{0.03} \right)^2 = 4444.44$$ 
+Therefore, the smallest sample size we could collect is 4445.
+    
+</details>",genenrate a practice question,"Location: 52
+
+Summary: Question:
+
+Based on the simulation conducted in cells 104-106, which generated 10,000 simulated jury panels of size 100, each with a proportion of 0.26 Black men, what is the minimum number of Black men observed across all simulated panels?
+
+Answer:
+```python
+counts = np.array([])
+
+for i in np.arange(10000):
+new_count = np.random.multinomial(100, demographics)[0]
+counts = np.append(counts, new_count)
+
+counts.min()
+```
+",1,0,0
+lec18,95,"np.random.multinomial(35, [0.3, 0.3, 0.4])",Generate a more complex question,"Location: 95
+
+Summary: Question:
+
+In the provided code, a simulation is run to model the number of Black men in a jury of 100 people, given that 26% of the population is Black men. Modify the code to simulate 10,000 juries, but this time, vary the percentage of Black men in the population from 10% to 40%, incrementing by 5% each time (10%, 15%, 20%, etc.). For each population percentage, calculate and store the minimum number of Black men observed across the 10,000 simulated juries. Finally, plot these minimum values against the corresponding population percentages of Black men. What can you conclude about the relationship between the population percentage of Black men and the minimum number of Black men observed in simulated juries of size 100?
+
+Answer:
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+population_percentages = np.arange(0.1, 0.41, 0.05)
+min_black_men = []
+
+for p in population_percentages:
+counts = np.array([])
+demographics = [p, 1 - p]
+for i in np.arange(10000):
+new_count = np.random.multinomial(100, demographics)[0]
+counts = np.append(counts, new_count)
+min_black_men.append(counts.min())
+
+plt.plot(population_percentages * 100, min_black_men)
+plt.xlabel('Percentage of Black Men in Population')
+plt.ylabel('Minimum Number of Black Men in Simulated Juries (10,000 runs)')
+plt.title('Relationship between Population Percentage and Minimum Number of Black Men in Simulated Juries')
+plt.show()
+
+#Conclusion:
+#The plot demonstrates a positive correlation between population percentage of Black men and minimum number observed in juries. Even at higher percentages, there's a non-zero probability of observing very few Black men in a single jury. This highlights the potential for underrepresentation, even with a relatively diverse population pool.
+```",0,0,0
+,,,Could it be more complicated?,"Location: 95
+
+Summary: Question:
+
+What is the minimum number of Black men observed in any of the 10,000 simulated jury panels of size 100, given that the proportion of Black men in the population is 26%?
+
+Answer:
+```python
+counts.min()
+```",,,
+lec19,84,"bpd.DataFrame().assign(results=results).plot(kind='hist', bins=np.arange(160, 240, 4), 
+                                             density=True, ec='w', figsize=(10, 5),
+                                             title='Empirical Distribution of the Number of Heads in 400 Flips of a Fair Coin');
+plt.legend();","For the above simulation, Could you generate a similar one but with 1000 simulated test statistics.","Location: 85
+
+Summary: Question:
+
+Could you generate a similar simulation to the one shown, but with 1000 simulated test statistics instead of 10,000?
+
+Answer:
+```python
+results = np.array([])
+for i in np.arange(1000):
+result = np.random.multinomial(400, [0.5, 0.5])[0]
+results = np.append(results, result)
+
+bpd.DataFrame().assign(results=results).plot(kind='hist', bins=np.arange(160, 240, 4),
+density=True, ec='w', figsize=(10, 5),
+title='Empirical Distribution of the Number of Heads in 400 Flips of a Fair Coin');
+plt.legend();
+```
+",1,1,1
+lec19,116,"results = np.array([])
+for i in np.arange(10000):
+    result = np.random.multinomial(400, [0.5, 0.5])[0]
+    results = np.append(results, result)
+    
+results",Generate another simulating example under the null.,"Location: 116
+
+Summary: Question:
+
+Generate another simulating example, under the null hypothesis, of the number of heads in 400 flips of a fair coin, and plot its empirical distribution.
+
+Answer:
+```python
+results = np.array([])
+for i in np.arange(10000):
+result = np.random.multinomial(400, [0.5, 0.5])[0]
+results = np.append(results, result)
+
+bpd.DataFrame().assign(results=results).plot(kind='hist', bins=np.arange(160, 240, 4), density=True, ec='w', figsize=(10, 5), title='Empirical Distribution of the Number of Heads in 400 Flips of a Fair Coin');
+plt.legend();
+```",1,0,0
+,,,could you make this example more different?,"Location: 116
+
+Summary: Question:
+
+Use the `flips_400` DataFrame to calculate the empirical probability of getting at least 188 heads in 400 coin flips. Express this probability as a decimal (rounded to 4 decimal places).
+
+Answer:
+```python
+import pandas as pd
+
+flips_400 = pd.read_csv('data/flips-400.csv')
+num_heads = flips_400['heads'].values
+empirical_probability = (np.sum(num_heads >= 188) / len(num_heads))
+rounded_probability = round(empirical_probability, 4)
+print(f'Empirical Probability of at least 188 heads: {rounded_probability}')
+```",,,
+lec20,50,np.count_nonzero(results <= 195) / len(results),try a different null hypothesis and check if we can use p-value to reject the null.,"Location: 51
+
+Summary: Question:
+
+Suppose our null hypothesis is that the average midterm score in Section C is 70. Using the `averages` array (generated from 1000 simulations of randomly sampling 108 students) and the observed average score for Section C (`observed_avg`), calculate the p-value for this new null hypothesis. Should we reject the null hypothesis at a significance level of 0.05?
+
+Answer:
+```python
+import numpy as np
+
+# Observed average score for Section C (from previous calculation)
+observed_avg = scores.groupby('Section').mean().get('Score').loc['C']
+
+# New null hypothesis average
+null_hypothesis_avg = 70
+
+# Calculate the p-value
+p_value = np.count_nonzero(averages <= null_hypothesis_avg) / len(averages)
+
+print(f""P-value for null hypothesis of 70: {p_value}"")
+
+# Check if we reject the null hypothesis at a significance level of 0.05
+significance_level = 0.05
+if p_value <= significance_level:
+print(""Reject the null hypothesis."")
+else:
+print(""Fail to reject the null hypothesis."")
+```
+",0,0,0
+lec20,103,"# p-value
+np.count_nonzero(averages <= observed_avg) / repetitions","generata a similar hypothesis based on different section, and calculate the p-value","Location: 102
+
+Summary: Question:
+
+Generate a similar hypothesis test for Section A, calculating the p-value. Assume the null hypothesis is that the average midterm score for Section A is equal to the average midterm score of the entire class. Use a simulation to estimate the p-value.
+
+Answer:
+```python
+import pandas as bpd
+import numpy as np
+
+# Calculate relevant statistics for Section A
+section_size_a = scores.groupby('Section').count().get('Score').loc['A']
+observed_avg_a = scores.groupby('Section').mean().get('Score').loc['A']
+overall_avg = scores['Score'].mean()
+
+# Simulation
+averages_a = np.array([])
+repetitions = 10000
+for i in np.arange(repetitions):
+random_sample = scores.sample(int(section_size_a), replace=False)
+new_average = random_sample.get('Score').mean()
+averages_a = np.append(averages_a, new_average)
+
+# Calculate p-value
+p_value_a = np.count_nonzero(averages_a <= observed_avg_a) / repetitions
+
+print(f""Section A had {section_size_a} students and an average midterm score of {observed_avg_a}.\nThe overall average midterm score is {overall_avg}"")
+print(f""The p-value for the hypothesis test is: {p_value_a}"")
+```
+",0,0,1
+lec21,33,"### Concept Check ✅ – Answer at [cc.dsc10.com](http://cc.dsc10.com) 
+
+What is the TVD between the distributions of class standing in DSC 10 and DSC 40A?
+
+| **Class Standing** | **DSC 10** | **DSC 40A** |
+| --- | --- | --- |
+| Freshman | 0.45 | 0.15 |
+| Sophomore | 0.35 | 0.35 |
+| Junior | 0.15 | 0.35 |
+| Senior+ | 0.05 | 0.15 |
+
+- A. 0.2
+- B. 0.3
+- C. 0.5
+- D. 0.6
+- E. None of the above",Generate a similar single-choice question to check understanding of Total Variation Distance.,"Location: 34
+
+Summary: Question:
+
+What is the total variation distance between the distributions of birth weight for smokers and non-smokers?
+
+Use the `babies` DataFrame to calculate this. Round your answer to two decimal places.
+
+A. 0.00
+B. 0.15
+C. 0.22
+D. 0.30
+E. 0.45
+
+Answer:
+```python
+import numpy as np
+
+def total_variation_distance(dist1, dist2):
+return np.abs(dist1 - dist2).sum() / 2
+
+# Calculate the total variation distance
+tvd = total_variation_distance(babies[babies['Maternal Smoker'] == True]['Birth Weight'], babies[babies['Maternal Smoker'] == False]['Birth Weight'])
+
+# Round the answer to two decimal places and display it.
+rounded_tvd = round(tvd, 2)
+print(rounded_tvd)
+```",0,0,0
+lec21,75,"left_normal = sample_mean_mean - 2 * sample_mean_sd
+right_normal = sample_mean_mean + 2 * sample_mean_sd
+
+# 95% CLT-based confidence interval for the mean body temperature of all people:
+[left_normal, right_normal]",generate a question to check undertsanding of Confidence intervals.,"Location: 74
+
+Summary: Question:
+
+Construct a 95% confidence interval for the mean body temperature using the bootstrap method, and compare it to the confidence interval obtained using the Central Limit Theorem (CLT). Use the `temperatures` DataFrame.
+
+Answer:
+```python
+import numpy as np
+import pandas as pd
+
+# Assuming 'temperatures' DataFrame is loaded and contains a 'temperature' column
+
+resample_means = np.array([])
+for i in np.arange(10000):
+resample = temperatures.sample(130, replace=True)
+resample_means = np.append(resample_means, resample.get('temperature').mean())
+
+left_boot = np.percentile(resample_means, 2.5)
+right_boot = np.percentile(resample_means, 97.5)
+bootstrap_ci = [left_boot, right_boot]
+print(f""95% Bootstrap Confidence Interval: {bootstrap_ci}"")
+
+sample_mean_mean = temperatures.get('temperature').mean()
+sample_mean_sd = np.std(temperatures.get('temperature')) / np.sqrt(temperatures.shape[0])
+
+left_normal = sample_mean_mean - 2 * sample_mean_sd
+right_normal = sample_mean_mean + 2 * sample_mean_sd
+clt_ci = [left_normal, right_normal]
+print(f""95% CLT Confidence Interval: {clt_ci}"")
+
+#Comparison:
+print(""Comparison:"")
+print(f""Bootstrap CI width: {right_boot - left_boot}"")
+print(f""CLT CI width: {right_normal - left_normal}"")
+```",1,0,1
+lec22,66,"n_repetitions = 500 # The dataset is large, so it takes too long to run if we use 5000 or 10000
+differences = np.array([])
+
+for i in np.arange(n_repetitions):
+    # Step 1: Shuffle the labels to create two new samples.
+    shuffled_labels = np.random.permutation(babies.get('Maternal Smoker'))
+    
+    # Step 2: Add them as a column to the DataFrame.
+    shuffled = babies_with_shuffled.assign(Shuffled_Labels=shuffled_labels)
+    
+    # Step 3: Compute the difference in group means in the two new samples and store the result.
+    difference = difference_in_group_means(shuffled)
+    
+    differences = np.append(differences, difference)
+    
+differences",generata another example to help understanding Permutation test,"Location: 67
+
+Summary: Question:
+
+Using the `footballs` DataFrame, perform a permutation test to determine if there's a statistically significant difference in the average pressure drop between the Patriots and Colts. Calculate the p-value.
+
+Answer:
+```python
+import numpy as np
+import pandas as pd
+
+# Load the data (assuming it's already loaded as 'footballs')
+# ... (Previous code to load and preprocess footballs DataFrame) ...
+
+def difference_in_mean_pressure_drops(pressures_df):
+team_means = pressures_df.groupby('Team').mean().get('Shuffled_Drops')
+return team_means.loc['Patriots'] - team_means.loc['Colts']
+
+n_repetitions = 5000
+differences = np.array([])
+for i in np.arange(n_repetitions):
+shuffled_drops = np.random.permutation(footballs['PressureDrop'])
+shuffled = footballs.assign(Shuffled_Drops=shuffled_drops)
+difference = difference_in_mean_pressure_drops(shuffled)
+differences = np.append(differences, difference)
+
+observed_difference = footballs.groupby('Team').mean().get('PressureDrop').loc['Patriots'] - footballs.groupby('Team').mean().get('PressureDrop').loc['Colts']
+p_value = np.count_nonzero(differences >= observed_difference) / n_repetitions
+print(f""P-value: {p_value}"")
+```
+",0,0,1
+lec22,108,"n_repetitions = 5000 # The dataset is much smaller than in the baby weights example, so a larger number of repetitions will still run quickly.
+
+differences = np.array([])
+for i in np.arange(n_repetitions):
+    # Step 1: Shuffle the pressure drops.
+    shuffled_drops = np.random.permutation(footballs.get('PressureDrop'))
+    
+    # Step 2: Put them in a DataFrame.
+    shuffled = footballs.assign(Shuffled_Drops=shuffled_drops)
+    
+    # Step 3: Compute the difference in group means and add the result to the differences array.
+    difference = difference_in_mean_pressure_drops(shuffled)
+
+    differences = np.append(differences, difference)
+    
+differences",generata another example to help understanding Permutation test based on the NFL data,"Location: 108
+
+Summary: Question:
+
+Suppose we want to test if there's a significant difference in average pressure drops between the Patriots and Colts teams, considering only the data from games where both teams played at home. Create a permutation test to investigate this hypothesis. Use the `footballs` DataFrame, and remember to filter the data to include only home games before running the permutation test. Assume ""Home"" indicates home game in the `GameType` column.
+
+Answer:
+```python
+# Filter the DataFrame to include only home games
+home_games = footballs[footballs['GameType'] == 'Home']
+
+# Group by team and calculate the mean pressure drop for home games
+home_means = home_games.groupby('Team')['PressureDrop'].mean()
+
+# Calculate the observed difference in means
+observed_difference_home = home_means.loc['Patriots'] - home_means.loc['Colts']
+
+# Permutation test
+n_repetitions = 5000
+differences_home = np.array([])
+
+for i in range(n_repetitions):
+# Shuffle the pressure drops
+shuffled_drops = np.random.permutation(home_games['PressureDrop'])
+
+# Create a new DataFrame with shuffled pressure drops
+shuffled_home = home_games.copy()
+shuffled_home['PressureDrop'] = shuffled_drops
+
+# Calculate the difference in means for the shuffled data
+shuffled_means = shuffled_home.groupby('Team')['PressureDrop'].mean()
+difference = shuffled_means.loc['Patriots'] - shuffled_means.loc['Colts']
+differences_home = np.append(differences_home, difference)
+
+# Calculate the p-value
+p_value_home = np.mean(differences_home >= observed_difference_home)
+
+print(f""Observed difference in means (home games): {observed_difference_home}"")
+print(f""P-value: {p_value_home}"")
+
+# Plot the histogram
+bpd.DataFrame({'Simulated Differences': differences_home}).plot(kind='hist', bins=20, density=True, ec='w', figsize=(10,5))
+plt.axvline(observed_difference_home, color='black', linewidth=4, label='Observed Difference')
+plt.legend()
+plt.show()
+```",0,0,0
+lec23,61,"calculate_r(hybrid, 'acceleration', 'price')",generate another example to see the association based on r and give explaination based on potential observation.,"Location: 88
+
+Summary: Question:
+
+Based on the `mom_son` DataFrame, calculate the correlation coefficient (r) between mother's height and son's height using the `calculate_r` function. Then, interpret the result in terms of the strength and direction of the linear association between the two variables, and discuss potential observations that might explain any patterns.
+
+Answer:
+```python
+# Calculate the correlation coefficient (r)
+r_mom_son = calculate_r(mom_son, 'mom', 'son')
+print(f""The correlation coefficient (r) between mother's and son's height is: {r_mom_son}"")
+
+# Interpretation
+if r_mom_son > 0:
+direction = ""positive""
+print(f""The correlation is {direction}, indicating that as mother's height increases, son's height tends to increase."")
+elif r_mom_son < 0:
+direction = ""negative""
+print(f""The correlation is {direction}, indicating that as mother's height increases, son's height tends to decrease."")
+else:
+print(""There is no linear correlation between mother's and son's height."")
+
+# Strength of association
+if abs(r_mom_son) < 0.3:
+strength = ""weak""
+elif abs(r_mom_son) < 0.7:
+strength = ""moderate""
+else:
+strength = ""strong""
+
+print(f""The strength of the association is {strength}. "")
+
+# Potential Observations and Explanations:
+print(""\nPotential observations that might explain the pattern (assuming a positive correlation):"")
+print(""- Genetic factors: Taller mothers may pass on genes that contribute to taller sons."")
+print(""- Environmental factors: Mothers' height might be correlated with environmental factors (e.g., nutrition, access to healthcare) that also influence their sons' height."")
+print(""- Shared environment: Mother and son share a home environment, impacting their nutrition and other factors that contribute to height."")
+print(""- Assortative mating: Taller women might be more likely to marry taller men, resulting in taller sons."")
+```",1,0,1
+lec23,123,"### The regression line
+
+- The regression line is the line through $(0,0)$ with slope $r$, when both variables are measured in **standard units**.
+
+<center><img src='images/regression-line.png' width=30%></center>
+
+- We use the regression line to make predictions!",give an example to help understanding the regression.,"Location: 122
+
+Summary: Question:
+
+Using the `mom_son` DataFrame, calculate the correlation coefficient (r) between mother's height and son's height. Then, plot the standardized heights of mothers and sons using `mom_son_su`, and add the regression line to the plot (passing through (0,0)). Remember that the slope of this line is the correlation coefficient 'r' you just calculated.
+
+Answer:
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+r_mom_son = calculate_r(mom_son, 'mom', 'son')
+print(f""Correlation coefficient (r): {r_mom_son}"")
+x = np.linspace(-3, 3)
+y = x * r_mom_son
+mom_son_su.plot(kind='scatter', x='mom (su)', y='son (su)', title='Regression Line for Mother and Son Heights', figsize=(10, 5))
+plt.plot(x, y, color='orange', label='Regression Line', lw=4)
+plt.axhline(0, color='black', linestyle='--')
+plt.axvline(0, color='black', linestyle='--')
+plt.xlim(-3, 3)
+plt.ylim(-3, 3)
+plt.xlabel('Mother Height (Standardized Units)')
+plt.ylabel('Son Height (Standardized Units)')
+plt.legend()
+plt.show()
+```
+",1,0,1
+lec24,13,"### Concept Check ✅ – Answer at [cc.dsc10.com](http://cc.dsc10.com) 
+
+A course has a midterm (mean 80, standard deviation 15) and a really hard final (mean 50, standard deviation 12).
+
+If the scatter plot comparing midterm & final scores for students looks linearly associated with correlation 0.75, then what is the predicted final exam score for a student who received a 90 on the midterm?
+
+- A. 54
+- B. 56
+- C. 58
+- D. 60
+- E. 62",generate a similar question to this,"Location: 14
+
+Summary: Question:
+
+Using the `x2` DataFrame and the regression line calculated from it, predict the `y` value when `x` is equal to 0.
+
+Answer:
+```python
+# Calculate the slope and intercept of the regression line for x2 DataFrame
+m_x2 = slope(x2, 'x', 'y')
+b_x2 = intercept(x2, 'x', 'y')
+
+# Predict y when x is 0
+predicted_y_x2 = m_x2 * 0 + b_x2
+
+print(f'The predicted y value when x is 0 is: {predicted_y_x2}')
+```",1,0,0
+lec24,117,"### Summary
+
+- The regression line in original units is $\text{predicted } y = mx + b$, where
+
+$$m = r \cdot \frac{\text{SD of } y}{\text{SD of }x}$$
+
+$$b = \text{mean of } y - m \cdot \text{mean of } x$$
+- This line is very sensitive to outliers.
+- This line has the lowest root mean squared error (RMSE) of all possible lines.
+    - It is the ""line of best fit"".",genenrate a question to understand the difference of regression line in standard units and regression line in original units,"Location: 118
+
+Summary: Question:
+
+What is the difference between the regression line calculated in standard units and the regression line calculated in original units? Illustrate this by calculating and plotting both lines for the `outlier` dataset, showing the equations for both lines.
+
+Answer:
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+def standard_units(col):
+return (col - col.mean()) / np.std(col)
+
+def calculate_r(df, x, y):
+x_su = standard_units(df.get(x))
+y_su = standard_units(df.get(y))
+return (x_su * y_su).mean()
+
+def slope(df, x, y):
+r = calculate_r(df, x, y)
+return r * np.std(df.get(y)) / np.std(df.get(x))
+
+def intercept(df, x, y):
+return df.get(y).mean() - slope(df, x, y) * df.get(x).mean()
+
+outlier = pd.read_csv('data/outlier.csv')
+
+# Regression line in original units
+m_original = slope(outlier, 'x', 'y')
+b_original = intercept(outlier, 'x', 'y')
+print(f""Regression line in original units: y = {m_original:.2f}x + {b_original:.2f}"")
+
+# Regression line in standard units (Illustrative, not directly used for plotting in original units)
+r = calculate_r(outlier, 'x', 'y')
+
+# Plotting both lines (in original units)
+plt.figure(figsize=(10, 6))
+plt.scatter(outlier['x'], outlier['y'], label='Data points')
+
+x_vals = np.linspace(outlier['x'].min(), outlier['x'].max(), 100)
+y_vals_original = m_original * x_vals + b_original
+plt.plot(x_vals, y_vals_original, color='red', label=f'Regression line (original units)')
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Regression Line Comparison')
+plt.legend()
+plt.show()
+
+#The key difference is that the regression line in original units gives predictions in the original y-units, whereas standard units focuses on the relationship between the variables in terms of standard deviations.
+```",0,0,1
+lec25,37,"# Residual plot.
+accel_mpg.plot(kind='scatter', x='acceleration', y='residuals', figsize=(10, 5), s=50, color='purple', label='residuals')
+plt.axhline(0, linewidth=3, color='k', label='y = 0')
+plt.title('Residual plot for regression between acceleration and mpg')
+plt.legend();",generate another residual plot as example,"Location: 38
+
+Summary: Question:
+
+Generate a residual plot for the 'dino' dataset, plotting 'x' against the residuals. Remember to include a horizontal line at y=0.
+
+Answer:
+```python
+import matplotlib.pyplot as plt
+
+dino_predictions = dino.assign(
+predicted=predicted(dino, 'x', 'y'),
+residuals=residual(dino, 'x', 'y')
+)
+dino_predictions.plot(kind='scatter', x='x', y='residuals', s=50, c='purple', figsize=(10, 5), label='residuals')
+plt.axhline(0, linewidth=3, color='k', label='y = 0')
+plt.title('Residual plot for regression between x and y in Dino dataset')
+plt.legend();
+```
+",1,0,1
+lec25,57,"### Concept Check ✅ – Answer at [cc.dsc10.com](http://cc.dsc10.com) 
+
+What strategy will help us assess how different our regression line's predictions would have been if we'd used a different sample?
+
+- A. Hypothesis testing
+- B. Permutation testing
+- C. Bootstrapping
+- D. Central Limit Theorem
+
+Don't scroll pass this point without answering!",generata a question to help us understanding one of these concepts,"Location: 57
+
+Summary: Question:
+
+Write a function that takes a DataFrame, x column name, and y column name and performs bootstrapping to generate 5000 resampled regression lines. Return a DataFrame containing the slopes and intercepts of these lines, and plot the regression lines on a single plot to visualize the variability. Use the `mom_son` DataFrame, with 'mom' as x and 'son' as y.
+
+Answer:
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+def bootstrap_regression(df, x_col, y_col, num_iterations=5000):
+""""""Performs bootstrapping to generate multiple regression lines.
+
+Args:
+df: The input DataFrame.
+x_col: The name of the x column.
+y_col: The name of the y column.
+num_iterations: The number of bootstrap iterations.
+
+Returns:
+A pandas DataFrame with columns 'slope' and 'intercept' containing the
+slopes and intercepts of the resampled regression lines.
+""""""
+
+def slope(df, x, y):
+return ((df[x] * df[y]).mean() - df[x].mean() * df[y].mean()) / ((df[x]**2).mean() - df[x].mean()**2)
+
+def intercept(df, x, y):
+return df[y].mean() - slope(df, x, y) * df[x].mean()
+
+slopes = []
+intercepts = []
+for _ in range(num_iterations):
+resample = df.sample(df.shape[0], replace=True)
+s = slope(resample, x_col, y_col)
+i = intercept(resample, x_col, y_col)
+slopes.append(s)
+intercepts.append(i)
+
+plt.figure(figsize=(8,4))
+x = np.arange(50, 80)
+for s, i in zip(slopes, intercepts):
+plt.plot(x, s * x + i, linewidth=1, alpha=0.1)
+plt.show()
+
+return pd.DataFrame({'slope': slopes, 'intercept': intercepts})
+
+bootstrap_results = bootstrap_regression(mom_son, 'mom', 'son')
+bootstrap_results
+```",1,0,1

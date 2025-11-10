@@ -1,0 +1,1282 @@
+Lecture #,Cell Index,Cell Content,User Input,LLM Output,Correctness,Context,Coherence
+lec02,55,"mean_3d = np.repeat(mean_2d[:, :, np.newaxis], 3, axis=2)",give another example simple enough but shows the usage,"Location: 56
+
+Summary: Question:
+
+Use the `all_dogs` DataFrame to find all dogs that weigh less than 20 pounds and are terriers. Show your code and the resulting DataFrame.
+
+Answer:
+```python
+all_dogs[(all_dogs['weight'] < 20) & (all_dogs['kind'] == 'terrier')]
+```",0,0,0
+lec02,148,"dogs.query('kind in [""sporting"", ""terrier""] and lifetime_cost < 20000')",give me another example question,"Location: 149
+
+Summary: Question:
+
+Use the `.query` method to select all dogs that weigh less than 20 pounds and are of the 'sporting' kind. Display the resulting DataFrame.
+
+Answer:
+```python
+dogs.query('weight < 20 and kind == ""sporting""')
+```",0,1,0
+lec02,205,"dogs = pd.read_csv(dog_path, dtype={'lifetime_cost': 'uint32'})
+dogs",give an example of some other pro tips,"Location: 206
+
+Summary: Question:
+
+Use the `all_dogs` DataFrame to find the mean longevity of dogs whose breed is in the list `['Labrador Retriever', 'German Shepherd Dog', 'Golden Retriever']`.
+
+Answer:
+```python
+mean_longevity = all_dogs[all_dogs['breed'].isin(['Labrador Retriever', 'German Shepherd Dog', 'Golden Retriever'])]['longevity'].mean()
+print(f""The mean longevity is: {mean_longevity}"")
+```",1,0,0
+lec03,41,penguin_groups.get_group('Chinstrap'),give another example about the groupby object,"Location: 43
+
+Summary: Question:
+
+Use the `baby` DataFrame to calculate the total count of babies for each sex in each year using the `groupby()` method.
+
+Answer:
+```python
+baby.groupby(['Year', 'Sex'])['Count'].sum()
+```",1,0,0
+lec03,75,"(penguins
+ .groupby('species')
+ .aggregate({'bill_length_mm': 'max', 'island': 'unique'})
+)",give me a similar example,"Location: 76
+
+Summary: Question:
+
+Use the `baby` DataFrame to compute the total number of baby names registered for each sex in each year. Your result should be a Series with a MultiIndex.
+
+Answer:
+```python
+(baby
+.groupby(['Year', 'Sex'])
+['Count']
+.sum()
+)
+```",1,0,0
+lec03,84,"z_mass = (penguins
+          .groupby('species')
+          ['body_mass_g']
+          .transform(z_score))
+z_mass",give a transform example that doesn't use z_score,"Location: 85
+
+Summary: Question:
+
+Use the `penguins` DataFrame to create a new column called `rank_mass` that contains the rank of each penguin's body mass within its species. Do not use the `z_score` function.
+
+Answer:
+```python
+import pandas as pd
+
+penguins['rank_mass'] = (penguins
+.groupby('species')
+['body_mass_g']
+.rank(method='first')
+.astype(int))
+penguins
+```",1,0,0
+,,,make it a transformation that deals with some attribute of the entire column,"Location: 85
+
+Summary: Question:
+
+Create a new column in the `baby` DataFrame called `Count_zscore` which contains the z-score of the `Count` column for each row. Use the `transform` method.
+
+Answer:
+```python
+baby['Count_zscore'] = (baby['Count'] - baby['Count'].mean()) / baby['Count'].std(ddof=0)
+baby
+```",,,
+lec04,21,"penguins.pivot_table(
+    index='species',
+    columns='island',
+    values='bill_length_mm', # Choice of column here doesn't actually matter!
+    aggfunc='count',
+)",give another example,"Location: 22
+
+Summary: Question:
+
+Use the `baby` dataset to create a pivot table that shows the total number of babies with each name in each year. The resulting table should have 'Name' as the index, 'Year' as the columns, and the sum of 'Count' as the values.
+
+Answer:
+```python
+baby.pivot_table(index='Name', columns='Year', values='Count', aggfunc='sum')
+```",1,0,1
+lec04,83,"nyt_small = nyt.iloc[[11, 12, 14]].reset_index(drop=True)
+
+names_to_keep = ['Julius', 'Karen', 'Noah']
+baby_small = (baby
+ .query(""Year == 2020 and Name in @names_to_keep"")
+ .reset_index(drop=True)
+)
+
+dfs_side_by_side(baby_small, nyt_small)",come up with another merge example,"Location: 83
+
+Summary: Question:
+
+Use the `profs` and `programs` DataFrames to create a new DataFrame that contains all professors' information along with the department and number of graduate students in their school. Handle missing values by using a `left` merge.
+
+Answer:
+```python
+profs.merge(programs, left_on='School', right_on='uni', how='left')
+```",1,0,1
+lec04,114,"cate_counts = (
+    baby
+    .merge(nyt, left_on='Name', right_on='nyt_name')
+    .groupby(['category', 'Year'])
+    ['Count']
+    .sum()
+    .reset_index()
+)
+cate_counts",come up with another similar example,"Location: 114
+
+Summary: Question:
+
+Create another example similar to the `baby` and `nyt` merge, using the `profs` and `schools` DataFrames. Specifically, perform a left merge of `profs` and `schools` based on the 'School' column in `profs` and the 'Abr' column in `schools`. Print the resulting DataFrame.
+
+Answer:
+```python
+profs_schools_merged = profs.merge(schools, left_on='School', right_on='Abr', how='left')
+print(profs_schools_merged)
+```",1,0,0
+lec05,54,"# Does the same thing as above!
+(
+    rest[rest.duplicated(subset=['address'], keep=False)]
+    .sort_values('address')
+)",show another way of doing this,"Location: 55
+
+Summary: Question:
+
+Write a different code snippet that identifies restaurants with duplicate addresses, similar to the code in cell 54 and 55, but uses a different approach to achieve the same result.
+
+Answer:
+```python
+# Find restaurants with duplicate addresses using boolean indexing and drop_duplicates
+duplicate_addresses = rest[rest.duplicated(subset=['address'], keep=False)]['address'].unique()
+duplicate_restaurants = rest[rest['address'].isin(duplicate_addresses)].sort_values('address')
+duplicate_restaurants
+```",1,1,1
+lec05,91,"dow_counts = insp['date'].dt.dayofweek.value_counts()
+fig = px.bar(dow_counts)
+fig.update_xaxes(tickvals=np.arange(7), ticktext=['Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'])",give another example question,"Location: 92
+
+Summary: Question:
+
+Create a bar chart showing the distribution of inspections across days of the week, using the `insp` DataFrame. Label the x-axis with the three-letter abbreviations for the days of the week (Mon, Tues, Wed, etc.).
+
+Answer:
+```python
+import plotly.express as px
+import numpy as np
+dow_counts = insp['date'].dt.dayofweek.value_counts()
+fig = px.bar(dow_counts)
+fig.update_xaxes(tickvals=np.arange(7), ticktext=['Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'])
+fig.show()
+```",1,0,0
+lec05,98,wide_example.melt(ignore_index=False),give another melt example using previous dataset,"Location: 98
+
+Summary: Question:
+
+Use the `melt` function to transform the `insp` DataFrame so that the `'score'` and `'grade'` columns become variables, and their values become values in a new column called `'value'`. The resulting DataFrame should include the `'inspection_id'` and `'date'` columns.
+
+Answer:
+```python
+melted_insp = insp[['inspection_id', 'date', 'score', 'grade']].melt(id_vars=['inspection_id', 'date'], var_name='variable', value_name='value')
+melted_insp
+```
+",1,1,1
+lec06,18,"# Draws 100 elements from a population in which 50% are group 0 and 50% are group 1.
+# This sampling is done WITH replacement.
+# In other words, each sampled element has a 50% chance of being group 0 and a 50% chance of being group 1.
+np.random.multinomial(100, [0.5, 0.5])",give another example about multinomial,"Location: 19
+
+Summary: Question:
+
+Using the `couples` DataFrame, simulate the gender distribution of 10000 individuals, assuming the proportions of males and females in the population are equal. Display the simulated counts for each gender.
+
+Answer:
+```python
+import numpy as np
+
+# Assuming equal proportions of males and females
+population_proportions = np.array([0.5, 0.5])
+
+# Simulate the gender distribution of 10000 individuals
+simulated_counts = np.random.multinomial(10000, population_proportions)
+
+# Display the simulated counts
+print(simulated_counts)
+```",0,0,1
+lec06,44,"eth_draws = np.random.multinomial(N_STUDENTS, eth['California'], size=100_000) / N_STUDENTS
+eth_draws",what if we want to show how it works with actual for-loop,"Location: 45
+
+Summary: Question:
+
+Rewrite the code within the for loop at index 146 that calculates the Total Variation Distance (TVD) using a for loop instead of the `tvd_of_groups` function. Use the `couples` DataFrame.
+
+Answer:
+```python
+N = 1000
+tvds = []
+
+for _ in range(N):
+# Shuffle marital statuses.
+with_shuffled = couples.assign(shuffled_mar=np.random.permutation(couples['mar_status']))
+
+#Compute TVD using a for loop
+cnts = with_shuffled.pivot_table(index='empl_status', columns='shuffled_mar', aggfunc='size')
+distr = cnts / cnts.sum()
+tvd = 0
+for i in range(len(distr)):
+tvd += abs(distr['unmarried'].iloc[i] - distr['married'].iloc[i])
+tvd /= 2
+tvds.append(tvd)
+```",1,0,0
+lec06,84,"### Hypothesis test setup
+
+- **Null Hypothesis**: In the population, birth weights of smokers' babies and non-smokers' babies have the same distribution, and the observed differences in our samples are due to random chance.
+
+- **Alternative Hypothesis**: In the population, smokers' babies have lower birth weights than non-smokers' babies, on average. The observed difference in our samples cannot be explained by random chance alone.
+
+- **Test Statistic**: Difference in group means.
+
+$$\text{mean weight of smokers' babies} - \text{mean weight of non-smokers' babies}$$
+
+- **Issue**: We don't know what the population distribution actually is – so how do we draw samples from it?
+    - This is different from the coin flipping, and the California ethnicity examples, because there **the null hypotheses were well-defined probability models**.",what about using a different test statistic,"Location: 84
+
+Summary: Question:
+
+Instead of using the difference in means as the test statistic for comparing birth weights between smokers' and non-smokers' babies, could we use the total variation distance (TVD) between the distributions of birth weights in the two groups? If so, how would the code for calculating the p-value change?
+
+Answer:
+```python
+import numpy as np
+import pandas as pd
+
+# ... (Previous code to load and process the 'baby' DataFrame) ...
+
+def tvd(group1, group2):
+""""""Computes the total variation distance (TVD) between two arrays.""""""
+hist1, _ = np.histogram(group1, bins=20, range=(0, 5000), density=True)
+hist2, _ = np.histogram(group2, bins=20, range=(0, 5000), density=True)
+return np.sum(np.abs(hist1 - hist2)) / 2
+
+n_repetitions = 500
+tvds = []
+for _ in range(n_repetitions):
+with_shuffled = baby.assign(Shuffled_Weights=np.random.permutation(baby['Birth Weight']))
+smokers = with_shuffled[with_shuffled['Maternal Smoker'] == True]['Shuffled_Weights']
+nonsmokers = with_shuffled[with_shuffled['Maternal Smoker'] == False]['Shuffled_Weights']
+tvd_val = tvd(smokers, nonsmokers)
+tvds.append(tvd_val)
+
+observed_tvd = tvd(baby[baby['Maternal Smoker'] == True]['Birth Weight'],
+baby[baby['Maternal Smoker'] == False]['Birth Weight'])
+p_value = np.mean(np.array(tvds) >= observed_tvd)
+print(f""Observed TVD: {observed_tvd:.3f}"")
+print(f""P-value: {p_value:.3f}"")
+```",1,1,0
+,,,I don't need code yet,"Location: 84
+
+Summary: Question:
+
+Using the `baby` DataFrame, calculate the difference in the mean birth weight between babies whose mothers smoked and those whose mothers did not smoke. Store this difference in a variable named `observed_difference`.
+
+Answer:
+```python
+mean_weights = baby.groupby('Maternal Smoker')['Birth Weight'].mean()
+observed_difference = mean_weights[True] - mean_weights[False]
+```",,,
+lec08,13,"<div class=""alert alert-warning"">
+    <h3>Question 🤔 (Answer at <a href=""https://dsc80.com/q"">dsc80.com/q</a>)</h3>
+
+Code: `lec08-blood`
+</div>
+
+Suppose Sam collects the blood pressures of 30 people in January. Then, in February, he asks a subset of the people to come back for a second reading (which means that there are missing blood pressures for February). What are the missing mechanisms for the blood pressures in February in the following situations?
+
+1. Sam uses `np.random.choice()` to select 7 individuals from January.
+2. Sam asks the individuals who had hypertension (blood pressure > 140) in January to come back in February.
+3. Sam asks everyone to come back for a second reading in February, but only records the data for people who had hypertension (blood pressure > 140).",Make a question similar to this,"Location: 14
+
+Summary: Question:
+
+Using the `heights_mar` DataFrame, perform mean imputation on the 'child' column, considering the gender. Show the first 5 rows of the resulting 'child' column.
+
+Answer:
+```python
+heights_mar_cond = heights_mar.groupby('gender')['child'].transform(lambda x: x.fillna(x.mean())).to_frame()
+print(heights_mar_cond['child'].head())
+```",1,0,0
+,,,Can you make it a bit more simple?,"Location: 14
+
+Summary: Question:
+
+Using the `heights_mar` DataFrame, perform mean imputation on the 'child' column, grouping by 'gender'. Show the first 5 rows of the resulting 'child' column.
+
+Answer:
+```python
+heights_mar_cond = heights_mar.groupby('gender')['child'].transform(lambda x: x.fillna(x.mean())).to_frame()
+print(heights_mar_cond['child'].head())
+```",,,
+lec08,60,"- The difference in means only works as a test statistic in permutation tests **if the two distributions have similar shapes**.
+    - It tests to see if one is a shifted version of the other.",Make a question to explain this concept,"Location: 62
+
+Summary: Question:
+
+The difference in means was used as a test statistic in the permutation test shown in the notebook. However, the lecture notes state that this only works if the two distributions have similar shapes. Create two distributions, 'A' and 'B', using `np.random.normal` such that the distributions have very different shapes, but similar means. Then, perform a permutation test using the difference in means as the test statistic. Show the code, the generated histogram, and the resulting p-value.
+
+Answer:
+```python
+import numpy as np
+import pandas as pd
+import plotly.express as px
+
+# Set the random seed for reproducibility.
+np.random.seed(42)
+
+# Generate data for distribution A (heavy-tailed):
+A = np.concatenate((np.random.normal(0, 1, 500), np.random.normal(0, 10, 500)))
+A = pd.Series(A, name = 'A')
+
+# Generate data for distribution B (normally distributed):
+B = np.random.normal(0, 1, 1000)
+B = pd.Series(B, name = 'B')
+
+# Merge the data
+data = pd.concat([A, B], axis=1).unstack().reset_index().drop('level_1', axis=1)
+data = data.rename(columns={'level_0': 'group', 0: 'data'})
+
+# Perform the permutation test
+n_repetitions = 500
+shuffled = data.copy()
+diff_means = []
+for _ in range(n_repetitions):
+shuffled['data'] = np.random.permutation(shuffled['data'])
+diff_mean = shuffled.groupby('group')['data'].mean().diff().abs().iloc[-1]
+diff_means.append(diff_mean)
+
+observed_diff = data.groupby('group')['data'].mean().diff().abs().iloc[-1]
+fig = px.histogram(pd.DataFrame(diff_means), x=0, nbins=50, histnorm='probability',
+title='Empirical Distribution of the Absolute Difference in Means')
+fig.add_vline(x=observed_diff, line_color='red', line_width=1, opacity=1)
+fig.add_annotation(text=f'Observed Absolute Difference in Means = {round(observed_diff, 2)}',
+x=2 * observed_diff, showarrow=False, y=0.07)
+fig.show()
+
+p_value = np.mean(np.array(diff_means) >= observed_diff)
+print(f""P-value: {p_value}"")
+```",0,0,1
+lec08,64,"### The Kolmogorov-Smirnov test statistic
+
+- The K-S test statistic measures the similarity between two distributions.
+- It is defined in terms of the **cumulative distribution function (CDF)** of a given distribution.
+    - If $f(x)$ is a distribution, then the CDF $F(x)$ is the proportion of values in distribution $f$ that are less than or equal to $x$.
+- The K-S statistic is roughly defined as the **largest difference between two CDFs**.
+<center><img src=./imgs/KS2_Example.png width=50%></center>",Generate a question for this,"Location: 66
+
+Summary: Question:
+
+Write a function that takes in a Pandas Series and returns its cumulative distribution function (CDF) as a Pandas Series. The index of the returned Series should be the sorted, unique values from the input Series, and the values should be the cumulative probabilities.
+
+Answer:
+```python
+import pandas as pd
+
+def compute_cdf(series):
+""""""Computes the CDF of a Pandas Series.
+
+Args:
+series: A Pandas Series of numerical data.
+
+Returns:
+A Pandas Series representing the CDF of the input series.
+""""""
+# Sort the unique values
+unique_values = series.sort_values().unique()
+
+# Compute the counts for each unique value
+value_counts = series.value_counts(sort=False)
+
+#Compute the cumulative probabilities
+cdf_values = value_counts.cumsum()/len(series)
+
+#Create a Pandas Series with the CDF
+cdf = pd.Series(cdf_values, index=unique_values)
+
+return cdf
+```",0,0,1
+lec09,7,"### Data sources
+
+* Often, the data you need doesn't exist in ""clean"" `.csv` files.
+
+* **Solution**: Collect your own data!
+    - Design and administer your own survey or run an experiment.
+    - Find related data on the internet.
+
+- The internet contains **massive** amounts of historical record; for most questions you can think of, the answer exists somewhere on the internet.",Explain this concept,"Location: 8
+
+Summary: Question:
+
+Using the `faculty` DataFrame created from web scraping the UCSD Data Science faculty page, filter the DataFrame to show only those faculty whose titles contain the word ""Professor"". Display the resulting DataFrame.
+
+Answer:
+```python
+import pandas as pd
+
+# Assuming 'faculty' DataFrame is available from previous code
+professors = faculty[faculty['title'].str.contains('Professor')]
+print(professors)
+```",1,0,1
+lec09,12,"### Request methods
+
+The request methods you will use most often are `GET` and `POST`; see [Mozilla's web docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods) for a detailed list of request methods.    
+
+- `GET` is used to request data **from** a specified resource.
+
+- `POST` is used to **send** data to the server. 
+    - For example, uploading a photo to Instagram or entering credit card information on Amazon.",Make a question for this,"Location: 13
+
+Summary: Question:
+
+Write a Python function that takes a URL and a dictionary of data as input. It should make a POST request to the URL using the `requests` library and return the JSON response if the request was successful. If the request fails (status code is not 200-299), it should print an error message indicating the status code and return `None`.
+
+Answer:
+```python
+import requests
+
+def make_post_request(url, data):
+try:
+response = requests.post(url, data=data)
+response.raise_for_status() # Raise an exception for bad status codes
+return response.json()
+except requests.exceptions.RequestException as e:
+print(f""Error making POST request: {e}"")
+print(f""Status code: {response.status_code}"")
+return None
+
+# Example usage:
+url = 'https://httpbin.org/post'
+data = {'name': 'Ariel', 'age': 16}
+result = make_post_request(url, data)
+print(result)
+
+url = 'https://this_is_not_a_real_url.com'
+result = make_post_request(url, data)
+
+```",0,1,1
+lec09,17,"### Making HTTP requests
+
+There are (at least) two ways to make HTTP requests outside of a browser:
+
+- From the command line, with `curl`.
+
+- **From Python, with the `requests` package.**",Make a question to show the difference between the 2 methods,"Location: 18
+
+Summary: Question:
+
+What is the difference between the `requests.get()` and `requests.post()` methods, and when would you use each?
+
+Answer:
+```python
+# The requests.get() method is used to retrieve data from a specified URL using the HTTP GET method. It's typically used for fetching data without modifying the server's state.
+
+# The requests.post() method is used to send data to a specified URL using the HTTP POST method. This is typically used to submit data to the server, often to create or update resources. POST requests can include data in the request body, whereas GET requests typically pass data in the URL query parameters.
+
+# Example:
+
+# GET request
+get_response = requests.get('https://httpbin.org/get') #Fetching data from server
+print(get_response.json())
+
+# POST request
+payload = {'key1': 'value1', 'key2': 'value2'}
+post_response = requests.post('https://httpbin.org/post', data=payload) # Sending data to server
+print(post_response.json())
+```",1,1,1
+,,,Make sure it uses curl for one of them,"Location: 18
+
+Summary: Question:
+
+Write a `curl` command that retrieves the HTML content of the UCSD website (`https://ucsd.edu`) and saves it to a file named `ucsd_index.html`.
+
+Answer:
+```python
+# This is a bash command, not Python code.
+# You would execute this in your terminal.
+
+curl https://ucsd.edu -o ucsd_index.html
+```",,,
+lec10,23,"### Useful tags to know
+
+
+|Element|Description|
+|:---|:---|
+|`<html>`|the document|
+|`<head>`|the header|
+|`<body>`|the body|
+|`<div>` |a logical division of the document|
+|`<span>`|an *inline* logical division|
+|`<p>`|a paragraph|
+| `<a>`| an anchor (hyperlink)|
+|`<h1>, <h2>, ...`| header(s) |
+|`<img>`| an image |
+
+There are many, many more, but these are by far the most common. See [this article](https://en.wikipedia.org/wiki/HTML_element) for examples.",Make a question to help explain this,"Location: 24
+
+Summary: Question:
+
+Use the `faculty` DataFrame to create a new DataFrame containing only the faculty members whose titles contain the word ""Professor"".
+
+Answer:
+```python
+professors = faculty[faculty['title'].str.contains('Professor')]
+professors
+```
+",1,0,0
+lec10,33,"### Beautiful Soup 🍜
+
+* [Beautiful Soup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) is a Python HTML parser.
+    - To ""parse"" means to ""extract meaning from a sequence of symbols"".
+* **Warning**: Beautiful Soup 4 and Beautiful Soup 3 work differently, so make sure you are using and looking at documentation for Beautiful Soup 4.",Make an example for this,"Location: 34
+
+Summary: Question:
+
+Use the `quotes` DataFrame to create a new DataFrame called `einstein_quotes` containing only the quotes by Albert Einstein. Display the first 5 rows of this new DataFrame.
+
+Answer:
+```python
+einstein_quotes = quotes[quotes['author'] == 'Albert Einstein']
+einstein_quotes.head()
+```
+",1,0,0
+lec10,,,Make it a bit more simple,"Location: 34
+
+Summary: Question:
+
+Using the `faculty` DataFrame, create a new DataFrame called `teaching_faculty` containing only the faculty members whose titles contain the word ""Teaching"" or ""Lecturer"".
+
+Answer:
+```python
+teaching_faculty = faculty[faculty['title'].str.contains('Teaching') | faculty['title'].str.contains('Lecturer')]
+teaching_faculty
+```",,,
+lec11,24,"- A regular expression, or **regex** for short, is a sequence of characters used to **match patterns in strings**.
+    - For example, `\(\d{3}\) \d{3}-\d{4}` describes a **pattern** that matches US phone numbers of the form `'(XXX) XXX-XXXX'`.
+    - Think of regex as a ""mini-language"" (formally: they are a grammar for describing a language).",Make a practice problem to explain this more deeply,"Location: 26
+
+Summary: Question:
+
+Write a regular expression to extract all phone numbers from the `contact` string. The phone numbers are in the format `(XXX) XXX-XXXX`.
+
+Answer:
+```python
+import re
+contact = '''
+Thank you for buying our expensive product!
+
+If you have a complaint, please send it to complaints@compuserve.com or call (800) 867-5309.
+
+If you are happy with your purchase, please call us at (800) 123-4567; we'd love to hear from you!
+
+Due to high demand, please allow one-hundred (100) business days for a response.
+'''
+phone_numbers = re.findall(r'\(\d{3}\) \d{3}-\d{4}', contact)
+print(phone_numbers)
+```",0,0,1
+lec11,67,"### Capture groups
+* Surround a regex with `(` and `)` to define a **capture group** within a pattern.
+- Capture groups are useful for extracting relevant parts of a string.",Make a question to clarify captured groups,"Location: 68
+
+Summary: Question:
+
+Write a regular expression using `re.findall` that finds all occurrences of two consecutive identical vowels (aa, ee, ii, oo, uu) followed by exactly three digits in the string 'eeoo124aa345iioo789'. Capture only the three digits in each match using capture groups.
+
+Answer:
+```python
+import re
+string = 'eeoo124aa345iioo789'
+matches = re.findall(r'(aa|ee|ii|oo|uu)(\d{3})', string)
+digits = [match[1] for match in matches]
+print(digits)
+```
+",1,0,1
+lec11,,,Can you make it a bit more simple?,"Location: 68
+
+Summary: Question:
+
+Use regular expressions to extract all phone numbers (area code and 7-digit number) from the `contact` string using capture groups. The area code should be in one capture group and the 7-digit number in another. Your output should be a list of tuples, where each tuple contains the area code and the 7-digit number.
+
+Answer:
+```python
+import re
+contact = '''
+Thank you for buying our expensive product!
+
+If you have a complaint, please send it to complaints@compuserve.com or call (800) 867-5309.
+
+If you are happy with your purchase, please call us at (800) 123-4567; we'd love to hear from you!
+
+Due to high demand, please allow one-hundred (100) business days for a response.
+'''
+
+matches = re.findall(r'\((\d{3})\) (\d{3}-\d{4})', contact)
+print(matches)
+```",,,
+lec12,8,"- In DSC 40A, our running example was to use **regression** to predict a data scientist's salary, given their GPA, years of experience, and years of education.",Make a question to review regression,"Location: 9
+
+Summary: Question:
+
+Given the context that we're using regression to predict a data scientist's salary based on their GPA, years of experience, and years of education (as discussed in DSC 40A), what are some key assumptions of linear regression that should be considered when building such a model, and why is it important to consider them?
+
+Answer:
+```python
+# Key assumptions of linear regression:
+# 1. Linearity: The relationship between the independent variables (GPA, experience, education) and the dependent variable (salary) should be linear.
+# Violation: Non-linear relationships can lead to biased and inefficient estimates.
+
+# 2. Independence of errors: The errors (residuals) should be independent of each other. This means that the error in one observation should not be correlated with the error in another observation.
+# Violation: Autocorrelation leads to inefficient estimates and unreliable standard errors.
+
+# 3. Homoscedasticity (constant variance): The variance of the errors should be constant across all levels of the independent variables.
+# Violation: Heteroscedasticity leads to inefficient and biased estimates.
+
+# 4. Normality of errors: The errors should be normally distributed. This assumption is less critical for large samples due to the Central Limit Theorem, but it is important for inference and the reliability of p-values.
+# Violation: Non-normality can affect the accuracy of hypothesis testing and confidence intervals.
+
+# 5. No multicollinearity: The independent variables should not be highly correlated with each other.
+# Violation: Multicollinearity makes it difficult to isolate the effect of each independent variable and can lead to unstable coefficient estimates and high standard errors.
+
+# Importance of considering assumptions:
+# Failing to meet these assumptions can lead to unreliable model results, including inaccurate predictions, incorrect hypothesis tests, and misleading confidence intervals. It's crucial to check the model's diagnostics after fitting to determine if violations of these assumptions exist and how to address them (e.g., data transformation, robust regression methods, variable selection).
+```",1,1,1
+lec12,,,"This is a little complicated, can you make a simpler example?","Location: 9
+
+Summary: Question:
+
+Create a TF-IDF matrix from the `sentences` Series using only the words 'global', 'warming', and 'change'.
+
+Answer:
+```python
+import pandas as pd
+import numpy as np
+
+sentences = pd.Series([
+'I really really want global peace',
+'I must enjoy global warming',
+'We must solve climate change'
+])
+
+unique_words = ['global', 'warming', 'change']
+
+tfidf_dict = {}
+
+for word in unique_words:
+re_pat = fr'\b{word}\b'
+tf = sentences.str.count(re_pat) / sentences.str.split().str.len()
+idf = np.log(len(sentences) / sentences.str.contains(re_pat).sum())
+tfidf_dict[word] = tf * idf
+
+tfidf = pd.DataFrame(tfidf_dict).set_index(sentences)
+
+tfidf
+```",,,
+lec12,97,"### Cosine similarity and bag of words
+
+To measure the similarity between two word vectors, instead of just counting the number of shared words, we should compute their **normalized** dot product, also known as their **cosine similarity**.
+
+$$\cos \theta = \boxed{\frac{\vec{a} \cdot \vec{b}}{|\vec{a}| | \vec{b}|}}$$",Can you give a mathematical example for this concept?,"Location: 99
+
+Summary: Question:
+
+Using the `counts_df` DataFrame created from the `sentences` Series, calculate the cosine similarity between the first and second sentences. Show your work by calculating the dot product and magnitudes separately, then combining them according to the formula for cosine similarity.
+
+Answer:
+```python
+import numpy as np
+
+# Extract relevant vectors from counts_df
+sentence1 = counts_df.iloc[0].values
+sentence2 = counts_df.iloc[1].values
+
+# Calculate the dot product
+dot_product = np.dot(sentence1, sentence2)
+
+# Calculate the magnitudes
+magnitude1 = np.linalg.norm(sentence1)
+magnitude2 = np.linalg.norm(sentence2)
+
+# Calculate cosine similarity
+cosine_similarity = dot_product / (magnitude1 * magnitude2)
+
+print(f""Dot product: {dot_product}"")
+print(f""Magnitude 1: {magnitude1}"")
+print(f""Magnitude 2: {magnitude2}"")
+print(f""Cosine Similarity: {cosine_similarity}"")
+```
+",1,1,1
+lec13,37,"<div class=""alert alert-warning"">
+    <h3>Question 🤔 (Answer at <a href=""https://dsc80.com/q"">dsc80.com/q</a>)</h3>
+
+Code: `tfidf`
+</div>
+
+From the Fa23 final:
+        
+Consider the following corpus:
+
+```
+Document number Content
+1               yesterday rainy today sunny
+2               yesterday sunny today sunny
+3               today rainy yesterday today
+4               yesterday yesterday today today
+```
+        
+**Which words have a TF-IDF score of 0 for all four documents?**",generata a similar question,"Location: 38
+
+Summary: Question:
+
+Use the `grades` DataFrame to build a linear regression model predicting the final exam score (`final`) based on the midterm exam score (`midterm`). Calculate the RMSE of this model.
+
+Answer:
+```python
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+# Assuming 'grades' DataFrame is loaded as shown in the notebook
+model = LinearRegression()
+model.fit(grades[['midterm']], grades['final'])
+predictions = model.predict(grades[['midterm']])
+rmse = np.sqrt(np.mean((grades['final'] - predictions)**2))
+print(f""RMSE: {rmse}"")
+```
+",1,0,0
+lec13,123,"model = LinearRegression()
+
+# Note that there are two arguments to fit – X and y!
+# (It is not necessary to write X= and y=)
+model.fit(X=tips[['total_bill']], y=tips['tip'])",Try to fit another linear regression model as an example and make a prediction,"Location: 124
+
+Summary: Question:
+
+Use the `grades` DataFrame to fit a linear regression model predicting the final exam score (`final`) based on the midterm exam score (`midterm`). Predict the final exam score for a student who received a midterm score of 85.
+
+Answer:
+```python
+from sklearn.linear_model import LinearRegression
+model = LinearRegression()
+model.fit(X=grades[['midterm']], y=grades['final'])
+prediction = model.predict([[85]])
+print(f""Predicted final exam score: {prediction[0]:.2f}"")
+```",1,0,1
+lec13,173,"### `LinearRegression` summary
+
+|Property|Example|Description|
+|---|---|---|
+|Initialize model parameters| `lr = LinearRegression()` | Create (empty) linear regression model|
+|Fit the model to the data | `lr.fit(X, y)` | Determines regression coefficients|
+|Use model for prediction |`lr.predict(X_new)`| Uses regression line to make predictions|
+|Evaluate the model| `lr.score(X, y)` | Calculates the $R^2$ of the LR model|
+|Access model attributes| `lr.coef_`, `lr.intercept_` | Accesses the regression coefficients and intercept|
+",Could you generate a question to help students understand all these examples?,"Location: 174
+
+Summary: Question:
+
+Given the `tips` DataFrame, create a linear regression model that predicts the tip amount using both `total_bill` and `size` as features. Calculate the RMSE of this model's predictions on the `tips` DataFrame.
+
+Answer:
+```python
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Assuming 'tips' DataFrame is available from previous code cells
+def rmse(actual, pred):
+return np.sqrt(np.mean((actual - pred) ** 2))
+
+model = LinearRegression()
+model.fit(tips[['total_bill', 'size']], tips['tip'])
+predictions = model.predict(tips[['total_bill', 'size']])
+rmse_val = rmse(tips['tip'], predictions)
+print(f""RMSE: {rmse_val}"")
+```",1,0,0
+lec14,21,"- There are a few equivalent ways of computing it, assuming your model **is linear and has an intercept term**:
+
+$$R^2 = \frac{\text{var}(\text{predicted $y$ values})}{\text{var}(\text{actual $y$ values})}$$
+
+$$R^2 = \left[ \text{correlation}(\text{predicted $y$ values}, \text{actual $y$ values}) \right]^2$$",Could you generate a question to help students understand the coefficient of determination,"Location: 22
+
+Summary: Question:
+
+Using the `tips` dataset and the `model_two` linear regression model (which uses 'total_bill' and 'size' to predict 'tip'), calculate the $R^2$ using the formula $\frac{\text{var}(\text{predicted $y$ values})}{\text{var}(\text{actual $y$ values})}$. Show your calculation.
+
+Answer:
+```python
+import numpy as np
+
+pred = tips.assign(predicted=model_two.predict(tips[['total_bill', 'size']]))
+R2 = np.var(pred['predicted']) / np.var(pred['tip'])
+print(R2)
+```",1,0,1
+lec14,56,"### Model #4: Multiple linear regression using total bill, table size, and smoker status
+
+Now that we've converted `'smoker'` to a numerical variable, we can use it as input in a regression model. Here's the model we'll try to fit:
+
+$$\text{predicted tip} = w_0 + w_1 \cdot \text{total bill} + w_2 \cdot \text{table size} + w_3 \cdot \text{smoker == Yes}$$",Could you try Multiple linear regression using something else?,"Location: 57
+
+Summary: Question:
+
+Using the `tips` DataFrame, create a multiple linear regression model to predict the `tip` amount using 'total_bill', 'size', 'smoker == Yes', and 'smoker == No' as predictor variables. Calculate and print the R-squared score of this model.
+
+Answer:
+```python
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Assuming tips DataFrame is already available from previous code cells
+
+model_four = LinearRegression()
+model_four.fit(tips[['total_bill', 'size', 'smoker == Yes', 'smoker == No']], tips['tip'])
+
+r_squared = model_four.score(tips[['total_bill', 'size', 'smoker == Yes', 'smoker == No']], tips['tip'])
+print(f""R-squared score: {r_squared}"")
+```
+",1,0,1
+lec14,189,"### `StandardScaler` summary
+
+|Property|Example|Description|
+|---|---|---|
+|Initialize with parameters| `stdscaler = StandardScaler()` | z-score the data (no parameters) |
+|Fit the transformer| `stdscaler.fit(X)` | Compute the mean and SD of `X`|
+|Transform data in a dataset | `feat = stdscaler.transform(X_new)` | z-score `X_new` with mean and SD of `X`|
+|Fit and transform| `stdscaler.fit_transform(X)` | Compute the mean and SD of `X`, then z-score `X`|",Genenrate a question to help understand the example of StandardScaler.,"Location: 190
+
+Summary: Question:
+
+Use the `StandardScaler` to standardize the `'total_bill'` and `'size'` columns in the `tips` DataFrame. Show the first 5 rows of the standardized DataFrame.
+
+Answer:
+```python
+from sklearn.preprocessing import StandardScaler
+
+tips_quant = tips[['total_bill', 'size']]
+
+stdscaler = StandardScaler()
+stdscaler.fit(tips_quant)
+standardized_tips = stdscaler.transform(tips_quant)
+
+standardized_df = pd.DataFrame(standardized_tips, columns=['total_bill', 'size'])
+print(standardized_df.head())
+```
+",1,0,1
+lec15,16,"from sklearn.preprocessing import OneHotEncoder
+from sklearn.linear_model import LinearRegression
+
+pl = Pipeline([
+    ('one-hot', OneHotEncoder()),
+    ('lin-reg', LinearRegression())
+])",generata question to help understand pipeline,"Location: 17
+
+Summary: Question:
+
+Using the `sample_1` DataFrame and the train/test split created in cell 217, write a `for` loop that iterates through polynomial degrees 1 through 25. In each iteration, create a pipeline with `PolynomialFeatures` and `LinearRegression`, fit it to the training data, and compute the test RMSE. Store the test RMSE values in a list called `test_rmse_list`. Finally, display this list.
+
+Answer:
+```python
+X = sample_1[['x']]
+y = sample_1['y']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=100)
+
+test_rmse_list = []
+
+for d in range(1, 26):
+pl = make_pipeline(PolynomialFeatures(d), LinearRegression())
+pl.fit(X_train, y_train)
+test_rmse_list.append(root_mean_squared_error(y_test, pl.predict(X_test)))
+
+display(test_rmse_list)
+```",1,0,0
+lec15,172,"<div class=""alert alert-warning"">
+    <h3>Question 🤔 (Answer at <a href=""https://dsc80.com/q"">dsc80.com/q</a>)</h3>
+
+Code: `fa23q94`
+</div>
+
+(Fa23 Final 9.4)
+
+Determine how each change below affects model bias and variance compared to this model:
+
+<center><img src='imgs/hx.png' width=50%></center>
+
+For each change, choose all of the following that apply: **increase bias, decrease bias, increase variance, decrease variance.**
+
+1. Add degree 3 polynomial features.
+1. Add a feature of numbers chosen at random between 0 and 1.
+1. Collect 100 more points for the training set.
+1. Don’t use the 'veg' feature.",could you generata a similar question?,"Location: 174
+
+Summary: Question:
+
+Using the `sample_1` DataFrame, create a train-test split with `test_size=0.25` and `random_state=100`. Then, train polynomial regression models (using `PolynomialFeatures` and `LinearRegression`) for degrees 1 through 25. Plot the training and testing RMSE errors as a function of polynomial degree. Describe the relationship you observe between the polynomial degree, training error, and testing error.
+
+Answer:
+```python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import root_mean_squared_error
+import plotly.express as px
+
+X = sample_1[['x']]
+y = sample_1['y']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=100)
+
+train_errs = []
+test_errs = []
+
+for d in range(1, 26):
+pl = make_pipeline(PolynomialFeatures(d), LinearRegression())
+pl.fit(X_train, y_train)
+train_errs.append(root_mean_squared_error(y_train, pl.predict(X_train)))
+test_errs.append(root_mean_squared_error(y_test, pl.predict(X_test)))
+
+errs = pd.DataFrame({'Train Error': train_errs, 'Test Error': test_errs, 'Degree': range(1, 26)})
+
+fig = px.line(errs, x='Degree', y=['Train Error', 'Test Error'])
+fig.update_layout(showlegend=True, xaxis_title='Polynomial Degree', yaxis_title='RMSE')
+fig.show()
+
+# Description:
+# Initially, both training and testing errors decrease as the polynomial degree increases.
+# However, at a certain point (typically around degree 3-5 in this example), the training error continues to decrease,
+# while the testing error starts to increase. This indicates overfitting: the model is learning the noise in the
+# training data too well and generalizes poorly to unseen data.
+```",1,0,0
+lec15,123,## Generalization,Could you give an example about why Generalization is important?,"Location: 125
+
+Summary: Question:
+
+We've seen that using higher-degree polynomials can lead to lower training error. However, this does not always mean better performance on unseen data. Using the `sample_1` and `errs` DataFrames, create a plot showing the training and testing error (RMSE) for polynomial degrees from 1 to 25. What does this plot demonstrate about the importance of generalization in model selection?
+
+Answer:
+```python
+import plotly.express as px
+
+# Assuming sample_1 and errs are defined from previous cells
+
+fig = px.line(errs, x=errs.index + 1, y=['Train Error', 'Test Error'])
+fig.update_layout(showlegend=True, xaxis_title='Polynomial Degree', yaxis_title='RMSE', title='Training and Testing Error for Polynomial Regression on Sample 1')
+fig.show()
+
+# Explanation:
+# The plot will show that training error decreases as polynomial degree increases.
+# However, at some point, the testing error will start to increase, indicating overfitting.
+# The importance of generalization is highlighted because a model with low training error but high testing error is not a good generalizing model.
+# We need to choose a model that balances training and testing error to generalize well to new, unseen data.
+```
+",1,0,1
+lec16,17,### Parameters vs. hyperparameters,Give an example to help understand difference betwwen Hyperparameters and parameter,"Location: 18
+
+Summary: Question:
+
+Illustrate the difference between hyperparameters and parameters using the `DecisionTreeClassifier` from the diabetes dataset example. Specifically, provide an example of a hyperparameter and its corresponding parameter(s) within the model.
+
+Answer:
+```python
+from sklearn.tree import DecisionTreeClassifier
+
+# Hyperparameter: max_depth
+# Controls the maximum depth of the tree. This is a hyperparameter because it's set *before* the model is trained.
+# It is not learned from the data; instead it is manually tuned.
+max_depth = 2 # Example value
+dt = DecisionTreeClassifier(max_depth=max_depth, criterion='entropy')
+dt.fit(X_train, y_train)
+
+# Parameters: internal nodes, leaf nodes, thresholds
+# These are learned during the training process.
+# They are specific values within the tree such as thresholds used to create the split in the tree.
+print(""Number of nodes in the tree: "", dt.tree_.node_count)
+# The nodes are determined during fitting.
+# The below will show the values of the decision thresholds used to decide whether to go left or right at each node.
+# The code below accesses the threshold value at node 0
+print(""Threshold at node 0: "",dt.tree_.threshold[0])
+
+```
+",1,0,1
+lec16,63,"for train, val in kfold.split(data):
+    print(f'train: {data[train]}, validation: {data[val]}')",generate a question to help understand KFold,"Location: 64
+
+Summary: Question:
+
+Using the `KFold` object created earlier and the `data` array, write code that splits the data into training and validation sets three times using a loop. In each iteration, print the training and validation indices. Don't use `kfold.split` directly; instead, use the `kfold` object's attributes to access the indices.
+
+Answer:
+```python
+from sklearn.model_selection import KFold
+import numpy as np
+data = np.arange(10, 70, 10)
+kfold = KFold(3, shuffle=True, random_state=1)
+
+for i in range(kfold.get_n_splits()):
+train_index, val_index = kfold.split(data)[i]
+print(f'Iteration {i+1}:')
+print(f' Train: {data[train_index]}')
+print(f' Validation: {data[val_index]}')
+```
+",0,0,1
+lec16,95,"<div class=""alert alert-warning"">
+    <h3>Question 🤔 (Answer at <a href=""https://dsc80.com/q"">dsc80.com/q</a>)</h3>
+
+Code: `10cv`
+</div>
+
+- Suppose you have a training dataset with 1000 rows.
+- You want to decide between 20 hyperparameters for a particular model.
+- To do so, you perform 10-fold cross-validation.
+- **How many times is the first row in the training dataset (`X.iloc[0]`) used for training a model?**
+",generate a similar question,"Location: 96
+
+Summary: Question:
+
+Using the `pipe_df` DataFrame, calculate and display the average cross-validated negative root mean squared error (RMSE) for each pipeline. Which pipeline performs best on average, based on lowest average RMSE?
+
+Answer:
+```python
+pipe_df.mean()
+```",0,1,0
+lec17,103,"<div class=""alert alert-warning"">
+    <h3>Question 🤔 (Answer at <a href=""https://dsc80.com/q"">dsc80.com/q</a>)</h3>
+
+Code: `fa23102`
+</div>
+
+(Fa23 Final Q10.2)
+    
+Suppose we write the following code:
+
+```python
+hyperparameters = {
+    'n_estimators': [10, 100, 1000], # number of trees per forest
+    'max_depth': [None, 100, 10]     # max depth of each tree
+}
+grids = GridSearchCV(
+    RandomForestClassifier(), param_grid=hyperparameters,
+    cv=3, # 3-fold cross-validation
+)
+grids.fit(X_train, y_train)
+```
+
+Answer the following questions with a single number.
+
+1. How many random forests are fit in total?
+1. How many decision trees are fit in total?
+1. How many times in total is the first point in X_train used to train a decision tree?",generata a similar question.,"Location: 104
+
+Summary: Question:
+
+Using the `news` dataset and the pipeline `pl` (which includes `CountVectorizer` and `RandomForestClassifier`), how would you modify the `GridSearchCV` to explore different values for both `clf__max_depth` and `clf__n_estimators`? Provide the code for the modified `GridSearchCV` object, and print the best hyperparameters found after fitting to the training data.
+
+Answer:
+```python
+from sklearn.model_selection import GridSearchCV
+import numpy as np
+
+hyperparameters = {
+'clf__max_depth': np.arange(2, 20, 2),
+'clf__n_estimators': [50, 100, 200]
+}
+
+grids = GridSearchCV(
+pl,
+n_jobs=-1, # Use multiple processors to parallelize
+param_grid=hyperparameters,
+return_train_score=True
+)
+grids.fit(X_train, y_train)
+print(grids.best_params_)
+```",1,1,0
+lec17,107,"### Example: COVID testing 🦠
+
+- UCSD Health administers hundreds of COVID tests a day. The tests are not fully accurate.
+- Each test comes back either
+    - positive, indicating that the individual has COVID, or
+    - negative, indicating that the individual does not have COVID.
+- **Question:** What is a TP in this scenario? FP? TN? FN?
+
+- **TP:** The test predicted that the individual has COVID, and they do ✅. 
+
+
+- **FP:** The test predicted that the individual has COVID, but they don't ❌.
+
+- **TN:** The test predicted that the individual doesn't have COVID, and they don't ✅.
+
+- **FN:** The test predicted that the individual doesn't have COVID, but they do ❌.",Generata a question to calculate accuracy,"Location: 118
+
+Summary: Question:
+
+Using the `pl` pipeline (trained on the `news` dataset), calculate the accuracy of predicting ""real"" for every news article in the test set. What is this accuracy, and how does it compare to the accuracy of the `pl` pipeline itself (obtained with `pl.score(X_test, y_test)`)?
+
+Answer:
+```python
+import numpy as np
+from sklearn.metrics import accuracy_score
+
+# Predict 'real' for every article in the test set
+y_pred_real = np.repeat('REAL', len(y_test))
+
+# Calculate the accuracy
+accuracy_real = accuracy_score(y_test, y_pred_real)
+print(f""Accuracy of predicting 'real' for all articles: {accuracy_real:.4f}"")
+
+# Calculate accuracy using pl.score
+accuracy_pl = pl.score(X_test, y_test)
+print(f""Accuracy of the pl pipeline: {accuracy_pl:.4f}"")
+
+print(f""Difference in accuracy: {accuracy_pl - accuracy_real:.4f}"")
+```",0,1,1
+lec17,121,"Precision
+Predicted Negative	Predicted Positive
+Actually Negative	TN = 0 ✅	FP = 91 ❌
+Actually Positive	FN = 0 ❌	TP = 9 ✅
+everyone-has-COVID classifier
+The precision of a binary classifier is the proportion of predicted positive instances that are correctly classified. We'd like this number to be as close to 1 (100%) as possible.
+
+ 
+ 
+
+To compute precision, look at the right (positive) column of the above confusion matrix.
+
+Tip: A good way to remember the difference between precision and recall is that in the denominator for 🅿️recision, both terms have 🅿️ in them (TP and FP).
+
+Note that the ""everyone-has-COVID"" classifier has perfect recall, but a precision of 
+ 
+, which is quite low.
+
+🚨 Key idea: There is a ""tradeoff"" between precision and recall. Ideally, you want both to be high. For a particular prediction task, one may be important than the other.",Generata a question to calculate precission and recall,"Location: 118
+
+Summary: Question:
+
+Using the `news` DataFrame, calculate the precision and recall for the 'Fake' news label. Assume that any instance where the `label` is 'Fake' is a true positive (TP) or false negative (FN), and instances where the `label` is 'Real' are true negatives (TN) or false positives (FP). Show your work.
+
+Answer:
+```python
+from sklearn.metrics import precision_score, recall_score
+
+# Assuming 'Fake' is the positive class
+y_true = news['label']
+y_pred = news['label'] # We're using the true labels as predictions for this exercise
+
+precision = precision_score(y_true, y_pred, pos_label='Fake')
+recall = recall_score(y_true, y_pred, pos_label='Fake')
+
+print(f""Precision: {precision:.4f}"")
+print(f""Recall: {recall:.4f}"")
+```",0,1,1
+lec18,10,"<center>⬇️</center>
+
+| | Predicted Negative | Predicted Positive |
+| --- | --- | --- |
+| **Actually Negative** | TN ✅ | FP ❌ |
+| **Actually Positive** | FN ❌ | TP ✅ |
+
+<br>
+
+<center><i>The <b>confusion matrix</b> above is organized the same way that <code>sklearn</code>'s confusion matrices are (but differently than in the wolf example).</i></center>",generata a question about the different evaluation metrics,"Location: 11
+
+Summary: Question:
+
+Using the `loans` DataFrame and the RandomForestClassifier model you've trained, calculate and compare the precision, recall, F1-score, and accuracy. Discuss the trade-offs between these metrics in the context of this loan prediction problem.
+
+Answer:
+```python
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+
+y_pred = clf.predict(X_test)
+
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+
+print(f""Precision: {precision:.4f}"")
+print(f""Recall: {recall:.4f}"")
+print(f""F1-score: {f1:.4f}"")
+print(f""Accuracy: {accuracy:.4f}"")
+
+# Discussion of trade-offs (example - adapt to your specific analysis):
+# In loan prediction, a high recall is often desired to minimize the risk of incorrectly classifying loan applicants as non-risky (false negatives).
+# However, this might come at the cost of lower precision, leading to more false positives (incorrectly classifying risky applicants as non-risky).
+# The F1-score offers a balance between precision and recall, while accuracy provides an overall measure of the model's performance. The best choice of metric depends on the specific needs and priorities of the organization (i.e., cost of false positives vs. false negatives).
+```
+",1,0,1
+lec18,28,"clf = LogisticRegression(max_iter=10000)
+clf.fit(X_train, y_train)",generate another example of fitting a logistic regression model,"Location: 29
+
+Summary: Question:
+
+Using the `loans` dataset, fit a logistic regression model to predict the `tag` variable. Print the model's intercept and coefficients.
+
+Answer:
+```python
+from sklearn.linear_model import LogisticRegression
+
+X = loans.drop('tag', axis=1)
+y = loans.tag
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) #added for reproducibility
+
+clf = LogisticRegression(max_iter=10000)
+clf.fit(X_train, y_train)
+
+print(""Intercept:"", clf.intercept_)
+print(""Coefficients:"", clf.coef_)
+```
+",1,0,0
+lec18,86,"### Example: Loan approval
+
+As you know from Project 2, LendingClub was a ""peer-to-peer lending company""; they [used to publish](https://www.lendingclub.com/info/download-data.action) a dataset describing the loans that they approved.
+
+* `'tag'`: whether loan was repaid in full (1.0) or defaulted (0.0).
+* `'loan_amnt'`: amount of the loan in dollars.
+* `'emp_length'`: number of years employed.
+* `'home_ownership'`: whether borrower owns (1.0) or rents (0.0).
+* `'inq_last_6mths'`: number of credit inquiries in last six months.
+* `'revol_bal'`: revolving balance on borrows accounts.
+* `'age'`: age in years of the borrower (protected attribute).",build a classifier that predict 'loan_amnt',"Location: 87
+
+Summary: Question:
+
+Build a model to predict the loan amount ('loan_amnt') using the features in the `loans` DataFrame. Evaluate its performance using R-squared.
+
+Answer:
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# Prepare the data
+X = loans.drop('loan_amnt', axis=1)
+y = loans['loan_amnt']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+r2 = r2_score(y_test, y_pred)
+print(f""R-squared: {r2}"")
+```
+",1,0,1
