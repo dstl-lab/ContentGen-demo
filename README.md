@@ -5,6 +5,16 @@
 
 This project accompanies the paper *“Improving LLM-Generated Educational Content: A Case Study on Prototyping, Prompt Engineering, and Evaluating a Tool for Generating Programming Problems for Data Science.”*
 
+[**DSTL Lab**](https://dstl.ucsd.edu/) | [**SIGCSE 2026 Paper**](https://sigcse2026.sigcse.org/details/sigcse-ts-2026-Papers/121/Improving-LLM-Generated-Educational-Content-A-Case-Study-on-Prototyping-Prompt-Engi) 
+
+**Please cite this paper if you used the code, dataset, or prompts in this repository.**
+
+> **Coming soon:** This paper is currently under submission.  
+> A preprint or DOI link will be provided once the paper is published.
+
+```bibtex
+@coming_soon
+```
 
 ## Quick Start
 
