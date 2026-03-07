@@ -17,7 +17,13 @@ This project accompanies the paper *“Improving LLM-Generated Educational Conte
 > Louis, MO, USA. ACM, New York, NY, USA, 7 pages. https://doi.org/10.1145/3770762.3772619
 
 ```bibtex
-@coming_soon
+@inproceedings{yu2026improving,
+  title={Improving LLM-Generated Educational Content: A Case Study on Prototyping, Prompt Engineering, and Evaluating a Tool for Generating Programming Problems for Data Science},
+  author={Yu, Jiaen and Wu, Ylesia and Cha, Gabriel and Shah, Ayush and Lau, Samuel},
+  booktitle={Proceedings of the 57th ACM Technical Symposium on Computer Science Education V. 1},
+  pages={1186--1192},
+  year={2026}
+}
 ```
 
 ## Quick Start
